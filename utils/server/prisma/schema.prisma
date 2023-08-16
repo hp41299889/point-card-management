@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  username  String
+  password  String
+  admin     Boolean
+}
+
+model Machine {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  orders      Order[]
+}
+
+model Game {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  description String?
+  products    Product[]
+}
+
+model Customer {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  orders      Order[]
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  orders      Order[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  description String?
+  gameId      Int
+  game        Game     @relation(fields: [gameId], references: [id])
+  orders      Order[]
+}
+
+model Order {
+  uid        String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  amount     Int
+  cost       Int
+  price      Int
+  status     String
+  note       String?
+  paymentId  Int
+  payment    Payment  @relation(fields: [paymentId], references: [id])
+  machineId  Int
+  machine    Machine  @relation(fields: [machineId], references: [id])
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+}
