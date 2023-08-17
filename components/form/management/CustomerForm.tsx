@@ -13,27 +13,31 @@ import {
 } from "@mui/material";
 
 import { FormProps } from "./interface";
-import { PostUser, User } from "@/pages/api/user/interface";
+import { PostCustomer, PatchCustomer } from "@/pages/api/customer/interface";
+import { Customer } from "@/pages/api/customer/interface";
 import ModalAction from "@/components/modal/ModalAction";
-import { deleteUserById, patchUserById, postUser } from "@/utils/client/api";
+import {
+  postCustomer,
+  patchCustomerById,
+  deleteCustomerById,
+} from "@/utils/client/api/customer";
 
-interface FormData extends PostUser {
+interface FormData extends PostCustomer {
   confirm: boolean;
 }
 
 interface Props extends FormProps {
-  data: User | null;
+  data: Customer | null;
 }
 
 const initData: FormData = {
   name: "",
-  username: "",
-  password: "",
-  admin: false,
+  description: "",
+  note: "",
   confirm: false,
 };
 
-const UserForm = (props: Props) => {
+const CustomerForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
   const {
     control,
@@ -50,7 +54,7 @@ const UserForm = (props: Props) => {
       case "create": {
         try {
           setValue("confirm", true);
-          const res = await postUser(payload);
+          const res = await postCustomer(payload);
           if (res.data.status === "success") {
             onClose();
             afterAction();
@@ -63,7 +67,7 @@ const UserForm = (props: Props) => {
       case "edit": {
         try {
           setValue("confirm", true);
-          const res = await patchUserById(data?.id!, payload);
+          const res = await patchCustomerById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
             afterAction();
@@ -74,7 +78,7 @@ const UserForm = (props: Props) => {
       }
       case "delete": {
         try {
-          const res = await deleteUserById(data?.id!);
+          const res = await deleteCustomerById(data?.id!);
           if (res.data.status === "success") {
             onClose();
             afterAction();
@@ -96,7 +100,7 @@ const UserForm = (props: Props) => {
         {type === "create" && "新增"}
         {type === "edit" && "編輯"}
         {type === "delete" && "刪除"}
-        用戶表單
+        客源表單
       </DialogTitle>
       <Divider />
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -120,27 +124,22 @@ const UserForm = (props: Props) => {
                 />
               </Grid>
               <Grid item lg={7} />
-              <Grid item lg>
+              <Grid item lg={12}>
                 <TextField
-                  id="username"
-                  label="帳號"
+                  id="description"
+                  label="描述"
                   fullWidth
-                  {...register("username", { required: true })}
+                  {...register("description")}
                   disabled={type === "watch"}
-                  error={Boolean(errors.username)}
-                  helperText={errors.username && "請輸入帳號"}
                 />
               </Grid>
-              <Grid item lg>
+              <Grid item lg={12}>
                 <TextField
-                  id="password"
-                  label="密碼"
-                  type="password"
+                  id="note"
+                  label="備註"
                   fullWidth
-                  {...register("password", { required: true })}
+                  {...register("note")}
                   disabled={type === "watch"}
-                  error={Boolean(errors.password)}
-                  helperText={errors.password && "請輸入密碼"}
                 />
               </Grid>
             </Grid>
@@ -153,4 +152,4 @@ const UserForm = (props: Props) => {
   );
 };
 
-export default UserForm;
+export default CustomerForm;

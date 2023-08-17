@@ -19,18 +19,19 @@ import { Add, Delete, Edit, Visibility } from "@mui/icons-material";
 import { TableMetadata, TableHook } from "./interface";
 import { FormProps, FormType } from "@/components/form/management/interface";
 import { User } from "@/pages/api/user/interface";
+import { Customer } from "@/pages/api/customer/interface";
 
 interface Props {
   title: string;
   metadata: TableMetadata[];
-  useData: TableHook<User>;
+  useData: TableHook<User | Customer>;
   Form: React.ComponentType<FormProps>;
 }
 
 const ManagementTable = (props: Props) => {
   const { title, metadata, useData, Form } = props;
   const { data, fetcher, loading } = useData();
-  const [selected, setSelected] = useState<User | null>(null);
+  const [selected, setSelected] = useState<User | Customer | null>(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
 
@@ -45,19 +46,19 @@ const ManagementTable = (props: Props) => {
     setFormModal(true);
   };
 
-  const onClickWatchData = (data: User | null) => {
+  const onClickWatchData = (data: User | Customer | null) => {
     setFormType("watch");
     setSelected(data);
     setFormModal(true);
   };
 
-  const onClickEditData = (data: User | null) => {
+  const onClickEditData = (data: User | Customer | null) => {
     setFormType("edit");
     setSelected(data);
     setFormModal(true);
   };
 
-  const onClickDeleteData = (data: User | null) => {
+  const onClickDeleteData = (data: User | Customer | null) => {
     setFormType("delete");
     setSelected(data);
     setFormModal(true);
