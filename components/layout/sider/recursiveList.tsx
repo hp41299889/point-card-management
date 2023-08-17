@@ -10,7 +10,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 
-import Link from "@/components/link/link";
+import Link from "@/components/link/Link";
 
 interface ListItem {
   title: string;

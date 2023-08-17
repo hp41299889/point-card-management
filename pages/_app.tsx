@@ -4,7 +4,9 @@ import {
   experimental_extendTheme as extendTheme,
 } from "@mui/material";
 
-import Layout from "@/components/layout/layout";
+// import "@/styles/globals.css";
+import "@/styles/style.css";
+import Layout from "@/components/layout/Layout";
 
 const theme = extendTheme({
   components: {

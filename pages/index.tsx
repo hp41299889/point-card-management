@@ -19,7 +19,7 @@ const Page = () => {
       if (res.data.status === "success") {
         const { token } = res.data.data;
         localStorage.setItem("token", token);
-        router.push("/admin");
+        router.push("/payment");
       }
     } catch (err) {
       console.error(err);
