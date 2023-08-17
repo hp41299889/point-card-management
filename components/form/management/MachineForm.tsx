@@ -21,6 +21,8 @@ import {
   patchMachineById,
   deleteMachineById,
 } from "@/utils/client/api/machine";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
 interface FormData extends PostMachine {
   confirm: boolean;
@@ -39,6 +41,7 @@ const initData: FormData = {
 
 const MachineForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -57,10 +60,24 @@ const MachineForm = (props: Props) => {
           const res = await postMachine(payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "新增機台成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "新增機台失敗！",
+            })
+          );
         }
         break;
       }
@@ -70,10 +87,24 @@ const MachineForm = (props: Props) => {
           const res = await patchMachineById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "編輯機台成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "編輯機台成功！",
+            })
+          );
         }
       }
       case "delete": {
@@ -81,10 +112,24 @@ const MachineForm = (props: Props) => {
           const res = await deleteMachineById(data?.id!);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "刪除機台成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "刪除機台失敗！",
+            })
+          );
         }
       }
     }

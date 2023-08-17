@@ -4,9 +4,10 @@ import {
   experimental_extendTheme as extendTheme,
 } from "@mui/material";
 
-// import "@/styles/globals.css";
 import "@/styles/style.css";
 import Layout from "@/components/layout/Layout";
+import { Providers } from "@/utils/client/redux/provider";
+import GlobalComponent from "@/components/global/GlobalComponent";
 
 const theme = extendTheme({
   components: {
@@ -26,13 +27,17 @@ export const App = (props: AppProps) => {
   const { Component, pageProps, router } = props;
   return (
     <CssVarsProvider theme={theme}>
-      {router.pathname === "/" ? (
-        <Component {...pageProps} />
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
+      <Providers>
+        <GlobalComponent>
+          {router.pathname === "/" ? (
+            <Component {...pageProps} />
+          ) : (
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          )}
+        </GlobalComponent>
+      </Providers>
     </CssVarsProvider>
   );
 };

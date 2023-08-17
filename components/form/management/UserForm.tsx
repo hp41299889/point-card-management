@@ -16,6 +16,8 @@ import { FormProps } from "./interface";
 import { PostUser, User } from "@/pages/api/user/interface";
 import ModalAction from "@/components/modal/ModalAction";
 import { deleteUserById, patchUserById, postUser } from "@/utils/client/api";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
 interface FormData extends PostUser {
   confirm: boolean;
@@ -35,6 +37,7 @@ const initData: FormData = {
 
 const UserForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -53,10 +56,24 @@ const UserForm = (props: Props) => {
           const res = await postUser(payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "新增用戶成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "新增用戶失敗！",
+            })
+          );
         }
         break;
       }
@@ -66,10 +83,24 @@ const UserForm = (props: Props) => {
           const res = await patchUserById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "編輯用戶成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "編輯用戶失敗！",
+            })
+          );
         }
       }
       case "delete": {
@@ -77,10 +108,24 @@ const UserForm = (props: Props) => {
           const res = await deleteUserById(data?.id!);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "刪除用戶成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "刪除用戶失敗！",
+            })
+          );
         }
       }
     }

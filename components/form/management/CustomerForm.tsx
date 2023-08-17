@@ -21,6 +21,8 @@ import {
   patchCustomerById,
   deleteCustomerById,
 } from "@/utils/client/api/customer";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app/slice";
 
 interface FormData extends PostCustomer {
   confirm: boolean;
@@ -39,6 +41,7 @@ const initData: FormData = {
 
 const CustomerForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -57,10 +60,24 @@ const CustomerForm = (props: Props) => {
           const res = await postCustomer(payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "新增客源成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "新增客源失敗！",
+            })
+          );
         }
         break;
       }
@@ -70,22 +87,52 @@ const CustomerForm = (props: Props) => {
           const res = await patchCustomerById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "編輯客源成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "編輯客源失敗！",
+            })
+          );
         }
+        break;
       }
       case "delete": {
         try {
           const res = await deleteCustomerById(data?.id!);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "刪除客源成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "刪除客源失敗！",
+            })
+          );
         }
+        break;
       }
     }
   };
