@@ -23,11 +23,12 @@ import { Customer } from "@/pages/api/customer/interface";
 import { Payment } from "@/pages/api/payment/interface";
 import { Machine } from "@/pages/api/machine/interface";
 import { Game } from "@/pages/api/game/interface";
+import { Product } from "@/pages/api/product/interface";
 
 interface Props {
   title: string;
   metadata: TableMetadata[];
-  useData: TableHook<User | Customer | Payment | Machine | Game>;
+  useData: TableHook<User | Customer | Payment | Machine | Product | Game>;
   Form: React.ComponentType<FormProps>;
 }
 
@@ -35,7 +36,7 @@ const ManagementTable = (props: Props) => {
   const { title, metadata, useData, Form } = props;
   const { data, fetcher, loading } = useData();
   const [selected, setSelected] = useState<
-    User | Customer | Payment | Machine | Game | null
+    User | Customer | Payment | Machine | Game | Product | null
   >(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
@@ -52,7 +53,7 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickWatchData = (
-    data: User | Customer | Payment | Machine | Game | null
+    data: User | Customer | Payment | Machine | Game | Product | null
   ) => {
     setFormType("watch");
     setSelected(data);
@@ -60,7 +61,7 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickEditData = (
-    data: User | Customer | Payment | Machine | Game | null
+    data: User | Customer | Payment | Machine | Game | Product | null
   ) => {
     setFormType("edit");
     setSelected(data);
@@ -68,11 +69,23 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickDeleteData = (
-    data: User | Customer | Payment | Machine | Game | null
+    data: User | Customer | Payment | Machine | Game | Product | null
   ) => {
     setFormType("delete");
     setSelected(data);
     setFormModal(true);
+  };
+
+  const getValueByPath = (object: any, path: any) => {
+    const keys = path.split(".");
+    let current = object;
+
+    for (let key of keys) {
+      if (current[key] === undefined) return undefined;
+      current = current[key];
+    }
+
+    return current;
   };
 
   useEffect(() => {
@@ -119,7 +132,9 @@ const ManagementTable = (props: Props) => {
                   <TableRow key={`${title}_${i}`}>
                     {metadata.map((m, i) => (
                       <TableCell key={m.key}>
-                        {m.preDisplay ? m.preDisplay(d) : d[m.key]}
+                        {m.preDisplay
+                          ? m.preDisplay(d)
+                          : getValueByPath(d, m.key)}
                       </TableCell>
                     ))}
                     <TableCell>

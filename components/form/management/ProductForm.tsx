@@ -23,6 +23,8 @@ import {
   deleteProductById,
 } from "@/utils/client/api/product";
 import { useGames } from "@/components/table/hook";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
 interface FormData extends PostProduct {
   confirm: boolean;
@@ -43,6 +45,7 @@ const initData: FormData = {
 
 const ProductForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
+  const dispatch = useDispatch();
   const {
     data: games,
     fetcher: fetchGames,
@@ -66,10 +69,24 @@ const ProductForm = (props: Props) => {
           const res = await postProduct(payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "新增項目成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "新增項目失敗！",
+            })
+          );
         }
         break;
       }
@@ -79,10 +96,24 @@ const ProductForm = (props: Props) => {
           const res = await patchProductById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "編輯客源成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "編輯客源失敗！",
+            })
+          );
         }
       }
       case "delete": {
@@ -90,10 +121,24 @@ const ProductForm = (props: Props) => {
           const res = await deleteProductById(data?.id!);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "刪除客源成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "刪除客源失敗！",
+            })
+          );
         }
       }
     }

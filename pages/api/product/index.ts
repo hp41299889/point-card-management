@@ -12,7 +12,13 @@ const handler = async (
     switch (method) {
       case "GET": {
         try {
-          const products = await prisma.product.findMany();
+          const products = await prisma.product.findMany({
+            include: {
+              game: true,
+            },
+          });
+          console.log(products);
+
           return products.length > 0
             ? res.status(200).json({
                 status: "success",

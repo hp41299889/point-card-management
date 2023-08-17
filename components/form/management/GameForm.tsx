@@ -21,6 +21,8 @@ import {
   patchGameById,
   deleteGameById,
 } from "@/utils/client/api/game";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
 interface FormData extends PostGame {
   confirm: boolean;
@@ -39,6 +41,7 @@ const initData: FormData = {
 
 const GameForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -57,10 +60,24 @@ const GameForm = (props: Props) => {
           const res = await postGame(payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "新增遊戲成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "新增遊戲失敗！",
+            })
+          );
         }
         break;
       }
@@ -70,10 +87,24 @@ const GameForm = (props: Props) => {
           const res = await patchGameById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "編輯遊戲成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "編輯遊戲失敗！",
+            })
+          );
         }
       }
       case "delete": {
@@ -81,10 +112,24 @@ const GameForm = (props: Props) => {
           const res = await deleteGameById(data?.id!);
           if (res.data.status === "success") {
             onClose();
+            dispatch(
+              setAppFeedbackSnackbar({
+                open: true,
+                type: "success",
+                message: "刪除遊戲成功！",
+              })
+            );
             afterAction();
           }
         } catch (err) {
           console.error(err);
+          dispatch(
+            setAppFeedbackSnackbar({
+              open: true,
+              type: "error",
+              message: "刪除遊戲失敗！",
+            })
+          );
         }
       }
     }
