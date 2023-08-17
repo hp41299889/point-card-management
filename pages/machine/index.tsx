@@ -1,6 +1,6 @@
 import { Box, Typography, Divider } from "@mui/material";
 
-import ManagementTable from "@/components/table/ManagementTable";
+import ManagementTable from "@/components/table/ManagementTables";
 import { TableMetadata } from "@/components/table/interface";
 import { useMachines } from "@/components/table/hook";
 import MachineForm from "@/components/form/management/MachineForm";

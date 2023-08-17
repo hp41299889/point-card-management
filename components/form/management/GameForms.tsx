@@ -15,7 +15,7 @@ import {
 import { FormProps } from "./interface";
 import { PostGame, PatchGame } from "@/pages/api/game/interface";
 import { Game } from "@/pages/api/game/interface";
-import ModalAction from "@/components/modal/ModalAction";
+import ModalAction from "@/components/modal/ModalActions";
 import {
   postGame,
   patchGameById,
