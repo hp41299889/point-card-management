@@ -7,7 +7,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { FC, ReactElement, ReactNode, useState } from "react";
+import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 
 import Link from "@/components/link/link";
@@ -51,6 +51,7 @@ const RecursiveList: FC<Props> = (props) => {
           return (
             <div key={`group_${item.title}_${index}`}>
               <ListItemButton onClick={() => toggleItemOpen(item.title)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
                 {openItems.includes(item.title) ? (
                   <ExpandLess />
@@ -71,7 +72,7 @@ const RecursiveList: FC<Props> = (props) => {
               <ListItem disablePadding>
                 <ListItemButton
                   selected={router.pathname === item.href}
-                  // sx={{ pl: level === 0 ? "" : `${level * 30}px` }}
+                  sx={{ pl: level === 0 ? "" : `${level * 30}px` }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText primary={item.title} />
