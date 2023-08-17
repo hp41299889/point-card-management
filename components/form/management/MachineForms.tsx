@@ -13,23 +13,23 @@ import {
 } from "@mui/material";
 
 import { FormProps } from "./interface";
-import { PostPayment, PatchPayment } from "@/pages/api/payment/interface";
-import { Payment } from "@/pages/api/payment/interface";
-import ModalAction from "@/components/modal/ModalAction";
+import { PostMachine, PatchMachine } from "@/pages/api/machine/interface";
+import { Machine } from "@/pages/api/machine/interface";
+import ModalAction from "@/components/modal/ModalActions";
 import {
-  postPayment,
-  patchPaymentById,
-  deletePaymentById,
-} from "@/utils/client/api/payment";
+  postMachine,
+  patchMachineById,
+  deleteMachineById,
+} from "@/utils/client/api/machine";
 import { useDispatch } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
-interface FormData extends PostPayment {
+interface FormData extends PostMachine {
   confirm: boolean;
 }
 
 interface Props extends FormProps {
-  data: Payment | null;
+  data: Machine | null;
 }
 
 const initData: FormData = {
@@ -39,7 +39,7 @@ const initData: FormData = {
   confirm: false,
 };
 
-const PaymentForm = (props: Props) => {
+const MachineForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
   const dispatch = useDispatch();
   const {
@@ -57,14 +57,14 @@ const PaymentForm = (props: Props) => {
       case "create": {
         try {
           setValue("confirm", true);
-          const res = await postPayment(payload);
+          const res = await postMachine(payload);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "新增支付方式成功！",
+                message: "新增機台成功！",
               })
             );
             afterAction();
@@ -75,7 +75,7 @@ const PaymentForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "新增支付方式失敗！",
+              message: "新增機台失敗！",
             })
           );
         }
@@ -84,14 +84,14 @@ const PaymentForm = (props: Props) => {
       case "edit": {
         try {
           setValue("confirm", true);
-          const res = await patchPaymentById(data?.id!, payload);
+          const res = await patchMachineById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "編輯支付方式成功！",
+                message: "編輯機台成功！",
               })
             );
             afterAction();
@@ -102,21 +102,21 @@ const PaymentForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "編輯支付方式失敗！",
+              message: "編輯機台成功！",
             })
           );
         }
       }
       case "delete": {
         try {
-          const res = await deletePaymentById(data?.id!);
+          const res = await deleteMachineById(data?.id!);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "刪除支付方式成功！",
+                message: "刪除機台成功！",
               })
             );
             afterAction();
@@ -127,7 +127,7 @@ const PaymentForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "刪除支付方式失敗！",
+              message: "刪除機台失敗！",
             })
           );
         }
@@ -145,7 +145,7 @@ const PaymentForm = (props: Props) => {
         {type === "create" && "新增"}
         {type === "edit" && "編輯"}
         {type === "delete" && "刪除"}
-        支付方式表單
+        機台表單
       </DialogTitle>
       <Divider />
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -197,4 +197,4 @@ const PaymentForm = (props: Props) => {
   );
 };
 
-export default PaymentForm;
+export default MachineForm;

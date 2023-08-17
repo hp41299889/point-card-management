@@ -1,6 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
 
-import ManagementTable from "@/components/table/ManagementTable";
+import ManagementTable from "@/components/table/ManagementTables";
 import CustomerForm from "@/components/form/management/CustomerForm";
 import { TableMetadata } from "@/components/table/interface";
 import { useCustomers } from "@/components/table/hook";

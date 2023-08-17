@@ -2,7 +2,7 @@ import { Box, Divider, Typography } from "@mui/material";
 
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
-import ManagementTable from "@/components/table/ManagementTable";
+import ManagementTable from "@/components/table/ManagementTables";
 import UserForm from "@/components/form/management/UserForm";
 import { useUsers } from "@/components/table/hook";
 
