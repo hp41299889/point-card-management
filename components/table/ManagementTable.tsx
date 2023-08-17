@@ -20,18 +20,23 @@ import { TableMetadata, TableHook } from "./interface";
 import { FormProps, FormType } from "@/components/form/management/interface";
 import { User } from "@/pages/api/user/interface";
 import { Customer } from "@/pages/api/customer/interface";
+import { Payment } from "@/pages/api/payment/interface";
+import { Machine } from "@/pages/api/machine/interface";
+import { Game } from "@/pages/api/game/interface";
 
 interface Props {
   title: string;
   metadata: TableMetadata[];
-  useData: TableHook<User | Customer>;
+  useData: TableHook<User | Customer | Payment | Machine | Game>;
   Form: React.ComponentType<FormProps>;
 }
 
 const ManagementTable = (props: Props) => {
   const { title, metadata, useData, Form } = props;
   const { data, fetcher, loading } = useData();
-  const [selected, setSelected] = useState<User | Customer | null>(null);
+  const [selected, setSelected] = useState<
+    User | Customer | Payment | Machine | Game | null
+  >(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
 
@@ -46,19 +51,25 @@ const ManagementTable = (props: Props) => {
     setFormModal(true);
   };
 
-  const onClickWatchData = (data: User | Customer | null) => {
+  const onClickWatchData = (
+    data: User | Customer | Payment | Machine | Game | null
+  ) => {
     setFormType("watch");
     setSelected(data);
     setFormModal(true);
   };
 
-  const onClickEditData = (data: User | Customer | null) => {
+  const onClickEditData = (
+    data: User | Customer | Payment | Machine | Game | null
+  ) => {
     setFormType("edit");
     setSelected(data);
     setFormModal(true);
   };
 
-  const onClickDeleteData = (data: User | Customer | null) => {
+  const onClickDeleteData = (
+    data: User | Customer | Payment | Machine | Game | null
+  ) => {
     setFormType("delete");
     setSelected(data);
     setFormModal(true);
@@ -93,9 +104,14 @@ const ManagementTable = (props: Props) => {
               <TableHead>
                 <TableRow>
                   {metadata.map((m, i) => (
-                    <TableCell key={m.label}>{m.label}</TableCell>
+                    <TableCell
+                      key={m.label}
+                      sx={{ width: m.width ? m.width : "auto" }}
+                    >
+                      {m.label}
+                    </TableCell>
                   ))}
-                  <TableCell>操作</TableCell>
+                  <TableCell sx={{ width: "150px" }}>操作</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
