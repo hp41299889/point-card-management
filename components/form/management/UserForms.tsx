@@ -13,33 +13,29 @@ import {
 } from "@mui/material";
 
 import { FormProps } from "./interface";
-import { PostMachine, PatchMachine } from "@/pages/api/machine/interface";
-import { Machine } from "@/pages/api/machine/interface";
-import ModalAction from "@/components/modal/ModalAction";
-import {
-  postMachine,
-  patchMachineById,
-  deleteMachineById,
-} from "@/utils/client/api/machine";
+import { PostUser, User } from "@/pages/api/user/interface";
+import ModalAction from "@/components/modal/ModalActions";
+import { deleteUserById, patchUserById, postUser } from "@/utils/client/api";
 import { useDispatch } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
-interface FormData extends PostMachine {
+interface FormData extends PostUser {
   confirm: boolean;
 }
 
 interface Props extends FormProps {
-  data: Machine | null;
+  data: User | null;
 }
 
 const initData: FormData = {
   name: "",
-  description: "",
-  note: "",
+  username: "",
+  password: "",
+  admin: false,
   confirm: false,
 };
 
-const MachineForm = (props: Props) => {
+const UserForm = (props: Props) => {
   const { open, type, data, onClose, afterAction } = props;
   const dispatch = useDispatch();
   const {
@@ -57,14 +53,14 @@ const MachineForm = (props: Props) => {
       case "create": {
         try {
           setValue("confirm", true);
-          const res = await postMachine(payload);
+          const res = await postUser(payload);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "新增機台成功！",
+                message: "新增用戶成功！",
               })
             );
             afterAction();
@@ -75,7 +71,7 @@ const MachineForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "新增機台失敗！",
+              message: "新增用戶失敗！",
             })
           );
         }
@@ -84,14 +80,14 @@ const MachineForm = (props: Props) => {
       case "edit": {
         try {
           setValue("confirm", true);
-          const res = await patchMachineById(data?.id!, payload);
+          const res = await patchUserById(data?.id!, payload);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "編輯機台成功！",
+                message: "編輯用戶成功！",
               })
             );
             afterAction();
@@ -102,21 +98,21 @@ const MachineForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "編輯機台成功！",
+              message: "編輯用戶失敗！",
             })
           );
         }
       }
       case "delete": {
         try {
-          const res = await deleteMachineById(data?.id!);
+          const res = await deleteUserById(data?.id!);
           if (res.data.status === "success") {
             onClose();
             dispatch(
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "刪除機台成功！",
+                message: "刪除用戶成功！",
               })
             );
             afterAction();
@@ -127,7 +123,7 @@ const MachineForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "刪除機台失敗！",
+              message: "刪除用戶失敗！",
             })
           );
         }
@@ -145,7 +141,7 @@ const MachineForm = (props: Props) => {
         {type === "create" && "新增"}
         {type === "edit" && "編輯"}
         {type === "delete" && "刪除"}
-        機台表單
+        用戶表單
       </DialogTitle>
       <Divider />
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -169,22 +165,27 @@ const MachineForm = (props: Props) => {
                 />
               </Grid>
               <Grid item lg={7} />
-              <Grid item lg={12}>
+              <Grid item lg>
                 <TextField
-                  id="description"
-                  label="描述"
+                  id="username"
+                  label="帳號"
                   fullWidth
-                  {...register("description")}
+                  {...register("username", { required: true })}
                   disabled={type === "watch"}
+                  error={Boolean(errors.username)}
+                  helperText={errors.username && "請輸入帳號"}
                 />
               </Grid>
-              <Grid item lg={12}>
+              <Grid item lg>
                 <TextField
-                  id="note"
-                  label="備註"
+                  id="password"
+                  label="密碼"
+                  type="password"
                   fullWidth
-                  {...register("note")}
+                  {...register("password", { required: true })}
                   disabled={type === "watch"}
+                  error={Boolean(errors.password)}
+                  helperText={errors.password && "請輸入密碼"}
                 />
               </Grid>
             </Grid>
@@ -197,4 +198,4 @@ const MachineForm = (props: Props) => {
   );
 };
 
-export default MachineForm;
+export default UserForm;
