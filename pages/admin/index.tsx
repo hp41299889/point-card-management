@@ -12,15 +12,19 @@ const metadata: TableMetadata[] = [
     label: "ID",
   },
   { key: "name", label: "名稱" },
+  { key: "description", label: "描述" },
+  { key: "note", label: "備註" },
   {
     key: "createdAt",
     label: "建立時間",
     preDisplay: (u) => toLocaleDateTime(u.createdAt),
+    width: "150px",
   },
   {
     key: "updatedAt",
     label: "更新時間",
     preDisplay: (u) => toLocaleDateTime(u.updatedAt),
+    width: "150px",
   },
 ];
 

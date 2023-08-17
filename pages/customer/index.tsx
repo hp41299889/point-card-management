@@ -18,11 +18,13 @@ const metadata: TableMetadata[] = [
     key: "createdAt",
     label: "建立時間",
     preDisplay: (u) => toLocaleDateTime(u.createdAt),
+    width: "150px",
   },
   {
     key: "updatedAt",
     label: "更新時間",
     preDisplay: (u) => toLocaleDateTime(u.updatedAt),
+    width: "150px",
   },
 ];
 
