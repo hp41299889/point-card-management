@@ -1,6 +1,6 @@
 import { Box, Typography, Divider } from "@mui/material";
 
-import ManagementTable from "@/components/table/ManagementTables";
+import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
 import { usePayments } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
