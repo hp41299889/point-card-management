@@ -16,7 +16,7 @@ import {
 import { FormProps } from "./interface";
 import { PostProduct, PatchProduct } from "@/pages/api/product/interface";
 import { Product } from "@/pages/api/product/interface";
-import ModalAction from "@/components/modal/ModalActions";
+import ModalAction from "@/components/modal/ModalAction";
 import {
   postProduct,
   patchProductById,
