@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { hash } from "bcrypt";
 
 import { ApiResponse, prisma } from "@/utils/server";
-import { PostUser } from "./interface";
+import { PostMachine } from "./interface";
 
 const handler = async (
   req: NextApiRequest,
@@ -13,50 +12,50 @@ const handler = async (
     switch (method) {
       case "GET": {
         try {
-          const users = await prisma.user.findMany();
-          return users.length > 0
+          const machines = await prisma.machine.findMany();
+          return machines.length > 0
             ? res.status(200).json({
                 status: "success",
-                message: "read users success",
-                data: users,
+                message: "read machines success",
+                data: machines,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "users not found",
+                message: "machine not found",
                 data: null,
               });
         } catch (err) {
           console.error("GET users error", err);
           return res.status(400).json({
             status: "failed",
-            message: "read users failed",
+            message: "read machines failed",
             data: null,
           });
         }
       }
       case "POST": {
-        const { body }: { body: PostUser } = req;
-        const { password, ...payload } = body;
+        const { body }: { body: PostMachine } = req;
+        const { ...payload } = body;
         try {
-          const createdUser = await prisma.user.create({
-            data: { ...payload, password: await hash(password, 10) },
+          const createdMachine = await prisma.machine.create({
+            data: { ...payload },
           });
-          return createdUser
+          return createdMachine
             ? res.status(201).json({
                 status: "success",
-                message: "create user success",
-                data: createdUser,
+                message: "create machine success",
+                data: createdMachine,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "create user failed",
+                message: "create machine failed",
                 data: null,
               });
         } catch (err) {
-          console.error("POST user error", err);
+          console.error("POST machine error", err);
           return res.status(400).json({
             status: "failed",
-            message: "create user failed",
+            message: "create machine failed",
             data: null,
           });
         }

@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prebuild": "yarn db",
+    "db": "yarn prisma generate",
     "prisma:format": "yarn prisma format",
     "prisma:push:local": "yarn prisma:format && dotenv -e .env.local -- yarn prisma db push"
   },

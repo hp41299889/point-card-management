@@ -1,5 +1,5 @@
-import { PatchUser, PostUser } from "@/pages/api/user/interface";
 import { api } from "./request";
+import { PatchUser, PostUser } from "@/pages/api/user/interface";
 
 const route = "/user";
 

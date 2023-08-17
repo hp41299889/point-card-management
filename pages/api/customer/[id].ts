@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ApiResponse, prisma } from "@/utils/server";
-import { PatchUser } from "./interface";
-import { hash } from "bcrypt";
+
+import { PatchCustomer } from "./interface";
 
 const handler = async (
   req: NextApiRequest,
@@ -14,79 +14,76 @@ const handler = async (
     switch (method) {
       case "GET": {
         try {
-          const user = await prisma.user.findFirst({ where: { id } });
-          return user
+          const customer = await prisma.customer.findFirst({ where: { id } });
+          return customer
             ? res.status(200).json({
                 status: "success",
-                message: "read user by id success",
-                data: user,
+                message: "read customer by id success",
+                data: customer,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "read user by id not found",
+                message: "read customer by id not found",
                 data: null,
               });
         } catch (err) {
-          console.error("GET user by id error", err);
+          console.error("GET customer by id error", err);
           return res.status(400).json({
             status: "failed",
-            message: "read user by id failed",
+            message: "read customer by id failed",
             data: null,
           });
         }
       }
       case "PATCH": {
-        const { body }: { body: PatchUser } = req;
-        if (body.password) {
-          body.password = await hash(body.password, 10);
-        }
+        const { body }: { body: PatchCustomer } = req;
         const { ...payload } = body;
         try {
-          const updatedUser = await prisma.user.update({
+          const updatedCustomer = await prisma.customer.update({
             where: { id },
             data: { ...payload },
           });
-          return updatedUser
+          return updatedCustomer
             ? res.status(200).json({
                 status: "success",
-                message: "update user by id success",
-                data: updatedUser,
+                message: "update customer by id success",
+                data: updatedCustomer,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "update user by id failed",
+                message: "update customer by id failed",
                 data: null,
               });
         } catch (err) {
-          console.error("PATCH user by id error", err);
+          console.error("PATCH customer by id error", err);
           return res.status(400).json({
             status: "failed",
-            message: "update user by id failed",
+            message: "update customer by id failed",
             data: null,
           });
         }
       }
       case "DELETE": {
         try {
-          const deletedUser = await prisma.user.delete({
+          const deletedCustomer = await prisma.customer.delete({
             where: { id },
           });
-          return deletedUser
+          return deletedCustomer
             ? res.status(200).json({
                 status: "success",
-                message: "delete user by id success",
-                data: deletedUser,
+                message: "delete customer by id success",
+                data: deletedCustomer,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "delete user by id failed",
+                message: "delete customer by id failed",
                 data: null,
               });
         } catch (err) {
-          console.error("DELETE user by id error", err);
+          console.error("DELETE customer by id error", err);
           return res.status(400).json({
             status: "failed",
-            message: "delete user by id failed",
+            message: "delete customer by id failed",
             data: null,
           });
         }

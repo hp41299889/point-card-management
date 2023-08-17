@@ -11,13 +11,15 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  username  String
-  password  String
-  admin     Boolean
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  username    String
+  password    String
+  admin       Boolean
+  description String?
+  note        String?
 }
 
 model Machine {
@@ -26,6 +28,7 @@ model Machine {
   updatedAt   DateTime @updatedAt
   name        String
   description String?
+  note        String?
   orders      Order[]
 }
 
@@ -35,6 +38,7 @@ model Game {
   updatedAt   DateTime  @updatedAt
   name        String
   description String?
+  note        String?
   products    Product[]
 }
 
@@ -44,6 +48,7 @@ model Customer {
   updatedAt   DateTime @updatedAt
   name        String
   description String?
+  note        String?
   orders      Order[]
 }
 
@@ -53,6 +58,7 @@ model Payment {
   updatedAt   DateTime @updatedAt
   name        String
   description String?
+  note        String?
   orders      Order[]
 }
 
@@ -62,26 +68,28 @@ model Product {
   updatedAt   DateTime @updatedAt
   name        String
   description String?
+  note        String?
   gameId      Int
   game        Game     @relation(fields: [gameId], references: [id])
   orders      Order[]
 }
 
 model Order {
-  uid        String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  amount     Int
-  cost       Int
-  price      Int
-  status     String
-  note       String?
-  paymentId  Int
-  payment    Payment  @relation(fields: [paymentId], references: [id])
-  machineId  Int
-  machine    Machine  @relation(fields: [machineId], references: [id])
-  productId  Int
-  product    Product  @relation(fields: [productId], references: [id])
-  customerId Int
-  customer   Customer @relation(fields: [customerId], references: [id])
+  uid         String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  amount      Int
+  cost        Int
+  price       Int
+  status      String
+  description String?
+  note        String?
+  paymentId   Int
+  payment     Payment  @relation(fields: [paymentId], references: [id])
+  machineId   Int
+  machine     Machine  @relation(fields: [machineId], references: [id])
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id])
+  customerId  Int
+  customer    Customer @relation(fields: [customerId], references: [id])
 }
