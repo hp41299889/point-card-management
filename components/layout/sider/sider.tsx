@@ -1,6 +1,6 @@
 import { List } from "@mui/material";
 
-import RecursiveList, { ListItems } from "./recursiveList";
+import RecursiveList, { ListItems } from "./RecursiveList";
 import {
   Category,
   ListAlt,
@@ -67,8 +67,7 @@ const Sider = () => {
   return (
     <List
       sx={{
-        width: "100%",
-        height: "100%",
+        width: "300px",
         bgcolor: "#101418",
         color: "white",
       }}

@@ -1,4 +1,5 @@
 export interface User extends PostUser {
+  [key: string]: any;
   id: number;
   createdAt: Date;
   updatedAt: Date;

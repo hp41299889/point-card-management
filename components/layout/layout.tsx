@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
-import Sider from "./sider/sider";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
+
+import Sider from "./sider/Sider";
 
 interface Props {
   children: ReactNode;
@@ -8,14 +9,15 @@ interface Props {
 
 const Layout = (props: Props) => {
   const { children } = props;
+
   return (
-    <Box height="100vh" width="100vh">
-      <Stack direction="row" width="100%" height="100%">
-        <Box width="300px">
-          <Sider />
+    <Box height="100vh" width="100%">
+      <Box display="flex" height="100%">
+        <Sider />
+        <Box width="100%" m={3} bgcolor="white" borderRadius={5} p={3}>
+          {children}
         </Box>
-        <Box width="100%">{children}</Box>
-      </Stack>
+      </Box>
     </Box>
   );
 };
