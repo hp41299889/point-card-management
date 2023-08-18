@@ -15,6 +15,8 @@ import {
   getProducts,
 } from "@/utils/client/api";
 import { Product } from "@/pages/api/product/interface";
+import { Order } from "@/pages/api/order/interface";
+import { getOrders } from "@/utils/client/api/order";
 
 export const useUsers: TableHook<User> = () => {
   const [data, setData] = useState<User[]>([]);
@@ -144,6 +146,30 @@ export const useProducts: TableHook<Product> = () => {
     setLoading(true);
     try {
       const res = await getProducts();
+      if (res.data.status === "success") {
+        setData(res.data.data);
+      }
+    } catch (err) {
+      setData([]);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetcher();
+  }, [fetcher]);
+
+  return { data, fetcher, loading };
+};
+
+export const useOrders: TableHook<Order> = () => {
+  const [data, setData] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetcher = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await getOrders();
       if (res.data.status === "success") {
         setData(res.data.data);
       }

@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ApiResponse, prisma } from "@/utils/server";
 import { PostPayment } from "./interface";
+import { authMiddleware } from "@/utils/server/middleware/auth";
 
 const handler = async (
   req: NextApiRequest,
@@ -13,17 +14,11 @@ const handler = async (
       case "GET": {
         try {
           const payments = await prisma.payment.findMany();
-          return payments.length > 0
-            ? res.status(200).json({
-                status: "success",
-                message: "read payments success",
-                data: payments,
-              })
-            : res.status(400).json({
-                status: "failed",
-                message: "payment not found",
-                data: null,
-              });
+          return res.status(200).json({
+            status: "success",
+            message: "read payments success",
+            data: payments,
+          });
         } catch (err) {
           console.error("GET users error", err);
           return res.status(400).json({
@@ -78,4 +73,4 @@ const handler = async (
   }
 };
 
-export default handler;
+export default authMiddleware(handler);

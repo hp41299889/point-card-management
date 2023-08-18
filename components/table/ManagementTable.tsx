@@ -24,11 +24,14 @@ import { Payment } from "@/pages/api/payment/interface";
 import { Machine } from "@/pages/api/machine/interface";
 import { Game } from "@/pages/api/game/interface";
 import { Product } from "@/pages/api/product/interface";
+import { Order } from "@/pages/api/order/interface";
 
 interface Props {
   title: string;
   metadata: TableMetadata[];
-  useData: TableHook<User | Customer | Payment | Machine | Product | Game>;
+  useData: TableHook<
+    User | Customer | Payment | Machine | Product | Game | Order
+  >;
   Form: React.ComponentType<FormProps>;
 }
 
@@ -36,7 +39,7 @@ const ManagementTable = (props: Props) => {
   const { title, metadata, useData, Form } = props;
   const { data, fetcher, loading } = useData();
   const [selected, setSelected] = useState<
-    User | Customer | Payment | Machine | Game | Product | null
+    User | Customer | Payment | Machine | Game | Product | Order | null
   >(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
@@ -53,7 +56,7 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickWatchData = (
-    data: User | Customer | Payment | Machine | Game | Product | null
+    data: User | Customer | Payment | Machine | Game | Product | Order | null
   ) => {
     setFormType("watch");
     setSelected(data);
@@ -61,7 +64,7 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickEditData = (
-    data: User | Customer | Payment | Machine | Game | Product | null
+    data: User | Customer | Payment | Machine | Game | Product | Order | null
   ) => {
     setFormType("edit");
     setSelected(data);
@@ -69,7 +72,7 @@ const ManagementTable = (props: Props) => {
   };
 
   const onClickDeleteData = (
-    data: User | Customer | Payment | Machine | Game | Product | null
+    data: User | Customer | Payment | Machine | Game | Product | Order | null
   ) => {
     setFormType("delete");
     setSelected(data);
@@ -130,11 +133,17 @@ const ManagementTable = (props: Props) => {
               <TableBody>
                 {data.map((d, i) => (
                   <TableRow key={`${title}_${i}`}>
-                    {metadata.map((m, i) => (
+                    {metadata.map((m, index) => (
                       <TableCell key={m.key}>
-                        {m.preDisplay
-                          ? m.preDisplay(d)
-                          : getValueByPath(d, m.key)}
+                        {m.key === "sn" ? (
+                          i + 1
+                        ) : (
+                          <>
+                            {m.preDisplay
+                              ? m.preDisplay(d)
+                              : getValueByPath(d, m.key)}
+                          </>
+                        )}
                       </TableCell>
                     ))}
                     <TableCell>

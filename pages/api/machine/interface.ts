@@ -7,11 +7,12 @@ export interface Machine extends PostMachine {
 
 export interface PostMachine extends PatchMachine {
   name: string;
-  description?: string;
-  note?: string;
 }
 
 export interface PatchMachine {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name?: string;
   description?: string;
   note?: string;

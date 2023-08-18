@@ -8,8 +8,8 @@ import { useUsers } from "@/components/table/hook";
 
 const metadata: TableMetadata[] = [
   {
-    key: "id",
-    label: "ID",
+    key: "sn",
+    label: "序號",
   },
   { key: "name", label: "名稱" },
   { key: "description", label: "描述" },

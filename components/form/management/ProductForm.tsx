@@ -28,7 +28,6 @@ import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 
 interface FormData extends PostProduct {
   confirm: boolean;
-  gameId: number;
 }
 
 interface Props extends FormProps {
@@ -100,7 +99,7 @@ const ProductForm = (props: Props) => {
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "編輯客源成功！",
+                message: "編輯項目成功！",
               })
             );
             afterAction();
@@ -111,10 +110,11 @@ const ProductForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "編輯客源失敗！",
+              message: "編輯項目失敗！",
             })
           );
         }
+        break;
       }
       case "delete": {
         try {
@@ -125,7 +125,7 @@ const ProductForm = (props: Props) => {
               setAppFeedbackSnackbar({
                 open: true,
                 type: "success",
-                message: "刪除客源成功！",
+                message: "刪除項目成功！",
               })
             );
             afterAction();
@@ -136,10 +136,11 @@ const ProductForm = (props: Props) => {
             setAppFeedbackSnackbar({
               open: true,
               type: "error",
-              message: "刪除客源失敗！",
+              message: "刪除項目失敗！",
             })
           );
         }
+        break;
       }
     }
   };

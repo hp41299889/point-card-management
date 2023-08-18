@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import "dotenv/config";
 
 import { ApiResponse, prisma } from "@/utils/server";
 import { PostAuth } from "./interface";
+
+const SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : "jwt";
 
 const handler = async (
   req: NextApiRequest,
@@ -32,7 +35,7 @@ const handler = async (
                 data: {
                   token: sign(
                     { username, role: user.admin ? "admin" : "user" },
-                    "secret",
+                    SECRET,
                     { expiresIn: "1h" }
                   ),
                 },

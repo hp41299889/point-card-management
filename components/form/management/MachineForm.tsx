@@ -106,6 +106,7 @@ const MachineForm = (props: Props) => {
             })
           );
         }
+        break;
       }
       case "delete": {
         try {
@@ -131,6 +132,7 @@ const MachineForm = (props: Props) => {
             })
           );
         }
+        break;
       }
     }
   };

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ApiResponse, prisma } from "@/utils/server";
-import { PostCustomer } from "./interface";
+import { PostOrder } from "./interface";
 import { authMiddleware } from "@/utils/server/middleware/auth";
 
 const handler = async (
@@ -13,44 +13,57 @@ const handler = async (
     switch (method) {
       case "GET": {
         try {
-          const customers = await prisma.customer.findMany();
+          const orders = await prisma.order.findMany({
+            include: {
+              payment: true,
+              product: {
+                include: {
+                  game: true,
+                },
+              },
+              customer: true,
+              machine: true,
+            },
+          });
           return res.status(200).json({
             status: "success",
-            message: "read customers success",
-            data: customers,
+            message: "read orders success",
+            data: orders,
           });
         } catch (err) {
           console.error("GET users error", err);
           return res.status(400).json({
             status: "failed",
-            message: "read customers failed",
+            message: "read orders failed",
             data: null,
           });
         }
       }
       case "POST": {
-        const { body }: { body: PostCustomer } = req;
+        const { body }: { body: PostOrder } = req;
         const { ...payload } = body;
+        console.log(payload);
+
         try {
-          const createdCustomer = await prisma.customer.create({
+          const createdOrder = await prisma.order.create({
             data: { ...payload },
           });
-          return createdCustomer
+          return createdOrder
             ? res.status(201).json({
                 status: "success",
-                message: "create customer success",
-                data: createdCustomer,
+                message: "create order success",
+                data: createdOrder,
               })
             : res.status(400).json({
                 status: "failed",
-                message: "create customer failed",
+                message: "create order failed",
                 data: null,
               });
         } catch (err) {
-          console.error("POST customer error", err);
+          console.error("POST order error", err);
           return res.status(400).json({
             status: "failed",
-            message: "create customer failed",
+            message: "create order failed",
             data: null,
           });
         }
