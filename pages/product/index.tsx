@@ -8,8 +8,8 @@ import ProductForm from "@/components/form/management/ProductForm";
 
 const metadata: TableMetadata[] = [
   {
-    key: "id",
-    label: "ID",
+    key: "sn",
+    label: "序號",
   },
   { key: "name", label: "名稱" },
   { key: "game.name", label: "遊戲名稱" },

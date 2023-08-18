@@ -9,7 +9,6 @@ interface Props {
 
 const Layout = (props: Props) => {
   const { children } = props;
-  console.log("");
 
   return (
     <Box height="100vh" width="100%">

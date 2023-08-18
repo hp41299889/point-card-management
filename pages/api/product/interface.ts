@@ -5,18 +5,18 @@ export interface Product extends PostProduct {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  gameId: number;
   game: Game;
 }
 
 export interface PostProduct extends PatchProduct {
   name: string;
-  description?: string;
-  note?: string;
   gameId: number;
 }
 
 export interface PatchProduct {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name?: string;
   description?: string;
   note?: string;

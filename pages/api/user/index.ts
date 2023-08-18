@@ -3,6 +3,7 @@ import { hash } from "bcrypt";
 
 import { ApiResponse, prisma } from "@/utils/server";
 import { PostUser } from "./interface";
+import { authMiddleware } from "@/utils/server/middleware/auth";
 
 const handler = async (
   req: NextApiRequest,
@@ -14,17 +15,11 @@ const handler = async (
       case "GET": {
         try {
           const users = await prisma.user.findMany();
-          return users.length > 0
-            ? res.status(200).json({
-                status: "success",
-                message: "read users success",
-                data: users,
-              })
-            : res.status(400).json({
-                status: "failed",
-                message: "users not found",
-                data: null,
-              });
+          return res.status(200).json({
+            status: "success",
+            message: "read users success",
+            data: users,
+          });
         } catch (err) {
           console.error("GET users error", err);
           return res.status(400).json({
@@ -79,4 +74,4 @@ const handler = async (
   }
 };
 
-export default handler;
+export default authMiddleware(handler);

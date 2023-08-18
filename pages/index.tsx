@@ -4,9 +4,15 @@ import { useRouter } from "next/router";
 
 import { postAuth } from "@/utils/client/api/auth";
 import { PostAuth } from "./api/auth/interface";
+import { useDispatch } from "@/utils/client/redux/store";
+import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
+import { setUser } from "@/utils/client/redux/user";
+import { User } from "./api/user/interface";
+import { UserSlice } from "@/utils/client/redux/user/slice";
 
 const Page = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -17,12 +23,29 @@ const Page = () => {
     try {
       const res = await postAuth(payload);
       if (res.data.status === "success") {
-        const { token } = res.data.data;
+        const { token, user }: { token: string; user: UserSlice } =
+          res.data.data;
         localStorage.setItem("token", token);
+        console.log(user);
+        dispatch(setUser(user));
+        dispatch(
+          setAppFeedbackSnackbar({
+            type: "success",
+            message: "登入成功！",
+            open: true,
+          })
+        );
         router.push("/payment");
       }
     } catch (err) {
       console.error(err);
+      dispatch(
+        setAppFeedbackSnackbar({
+          type: "error",
+          message: "登入失敗！",
+          open: true,
+        })
+      );
     }
   };
 
