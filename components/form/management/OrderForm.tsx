@@ -35,10 +35,11 @@ import {
   usePayments,
   useProducts,
 } from "@/components/table/hook";
-import { useDispatch } from "@/utils/client/redux/store";
+import { useDispatch, useSelector } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 import { Product } from "@/pages/api/product/interface";
 import { getProductsByGameId } from "@/utils/client/api/product";
+import { selectUser } from "@/utils/client/redux/user";
 
 interface FormData extends PostOrder {
   confirm: boolean;
@@ -101,9 +102,10 @@ const OrderForm = (props: Props) => {
     formState: { errors },
   } = useForm<FormData>({ defaultValues: initData });
 
-  const onSubmit = async (formData: FormData) => {
-    console.log(data);
+  const user = useSelector(selectUser);
+  console.log(user);
 
+  const onSubmit = async (formData: FormData) => {
     const { confirm, ...payload } = formData;
     const cost = `${cost1},${cost2},${equal}`;
     payload.cost = cost;

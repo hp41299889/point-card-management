@@ -1,2 +1,2 @@
-export { setAppFeedbackSnackbar } from "./slice";
+export { appSlice, setAppFeedbackSnackbar } from "./slice";
 export { selectAppFeedbackSnackbar } from "./selector";
