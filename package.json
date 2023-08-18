@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "yarn db && yarn global add dotenv-cli",
+    "prebuild": "yarn global add dotenv-cli && yarn db",
     "db": "yarn prisma generate && yarn prisma:seed:prod",
     "prisma:seed:local": "dotenv -e .env.local -- yarn prisma db seed",
     "prisma:seed:prod": "dotenv -e .env.prod -- yarn prisma db seed",
