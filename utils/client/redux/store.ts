@@ -9,11 +9,13 @@ import {
   type TypedUseSelectorHook,
 } from "react-redux";
 
-import { appSlice } from "./app/slice";
+import { appSlice } from "./app";
+import { userSlice } from "./user";
 
 export const reduxStore = configureStore({
   reducer: {
     app: appSlice.reducer,
+    user: userSlice.reducer,
   },
 });
 

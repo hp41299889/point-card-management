@@ -38,6 +38,7 @@ const handler = async (
                     SECRET,
                     { expiresIn: "1h" }
                   ),
+                  user,
                 },
               })
             : res.status(401).json({
