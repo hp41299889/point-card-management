@@ -14,12 +14,13 @@ model User {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  name        String
+  name        String   @unique
   username    String
   password    String
   admin       Boolean
   description String?
   note        String?
+  orders      Order[]
 }
 
 model Machine {
@@ -79,11 +80,13 @@ model Order {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   amount      Int
-  cost        Int
+  cost        String
   price       Int
   status      String
   description String?
   note        String?
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
   paymentId   Int
   payment     Payment  @relation(fields: [paymentId], references: [id])
   machineId   Int

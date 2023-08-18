@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ApiResponse, prisma } from "@/utils/server";
 import { PostProduct } from "./interface";
+import { authMiddleware } from "@/utils/server/middleware/auth";
 
 const handler = async (
   req: NextApiRequest,
@@ -11,32 +12,46 @@ const handler = async (
     const { method } = req;
     switch (method) {
       case "GET": {
-        try {
-          const products = await prisma.product.findMany({
-            include: {
-              game: true,
-            },
-          });
-          console.log(products);
-
-          return products.length > 0
-            ? res.status(200).json({
-                status: "success",
-                message: "read products success",
-                data: products,
-              })
-            : res.status(400).json({
-                status: "failed",
-                message: "product not found",
-                data: null,
-              });
-        } catch (err) {
-          console.error("GET users error", err);
-          return res.status(400).json({
-            status: "failed",
-            message: "read products failed",
-            data: null,
-          });
+        const { query } = req;
+        const gameId = Number(query.gameId);
+        if (gameId) {
+          try {
+            const products = await prisma.product.findMany({
+              where: { gameId },
+            });
+            return res.status(200).json({
+              status: "success",
+              message: "read products by gameId success",
+              data: products,
+            });
+          } catch (err) {
+            console.error("GET users error", err);
+            return res.status(400).json({
+              status: "failed",
+              message: "read products by gameId failed",
+              data: null,
+            });
+          }
+        } else {
+          try {
+            const products = await prisma.product.findMany({
+              include: {
+                game: true,
+              },
+            });
+            return res.status(200).json({
+              status: "success",
+              message: "read products success",
+              data: products,
+            });
+          } catch (err) {
+            console.error("GET products error", err);
+            return res.status(400).json({
+              status: "failed",
+              message: "read products failed",
+              data: null,
+            });
+          }
         }
       }
       case "POST": {
@@ -84,4 +99,4 @@ const handler = async (
   }
 };
 
-export default handler;
+export default authMiddleware(handler);

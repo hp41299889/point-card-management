@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ApiResponse, prisma } from "@/utils/server";
 
 import { PatchProduct } from "./interface";
+import { authMiddleware } from "@/utils/server/middleware/auth";
 
 const handler = async (
   req: NextApiRequest,
@@ -37,7 +38,7 @@ const handler = async (
       }
       case "PATCH": {
         const { body }: { body: PatchProduct } = req;
-        const { ...payload } = body;
+        const { id, createdAt, updatedAt, ...payload } = body;
         try {
           const updatedProduct = await prisma.product.update({
             where: { id },
@@ -106,4 +107,4 @@ const handler = async (
   }
 };
 
-export default handler;
+export default authMiddleware(handler);

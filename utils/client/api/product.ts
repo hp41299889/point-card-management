@@ -7,6 +7,10 @@ export const getProducts = async () => {
   return api.get(route);
 };
 
+export const getProductsByGameId = async (gameId: number) => {
+  return api.get(`${route}?gameId=${gameId}`);
+};
+
 export const postProduct = async (payload: PostProduct) => {
   return api.post(route, payload);
 };

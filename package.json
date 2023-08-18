@@ -8,9 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "prebuild": "yarn db",
-    "db": "yarn prisma generate",
-    "prisma:format": "yarn prisma format",
-    "prisma:push:local": "yarn prisma:format && dotenv -e .env.local -- yarn prisma db push"
+    "db": "yarn prisma generate && yarn prisma:seed:prod",
+    "prisma:seed:local": "dotenv -e .env.local -- yarn prisma db seed",
+    "prisma:seed:prod": "dotenv -e .env.prod -- yarn prisma db seed",
+    "prisma:push:local": "yarn prisma format && yarn prisma generate && dotenv -e .env.local -- yarn prisma db push"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -43,9 +44,11 @@
     "react-redux": "^8.1.2",
     "redux": "^4.2.1",
     "tailwindcss": "3.3.3",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.6"
   },
   "prisma": {
-    "schema": "./utils/server/prisma/schema.prisma"
+    "schema": "utils/server/prisma/schema.prisma",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} utils/server/prisma/seed.ts"
   }
 }

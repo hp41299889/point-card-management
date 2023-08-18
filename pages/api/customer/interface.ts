@@ -7,11 +7,12 @@ export interface Customer extends PostCustomer {
 
 export interface PostCustomer extends PatchCustomer {
   name: string;
-  description?: string;
-  note?: string;
 }
 
 export interface PatchCustomer {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name?: string;
   description?: string;
   note?: string;

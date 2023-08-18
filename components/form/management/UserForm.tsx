@@ -32,6 +32,8 @@ const initData: FormData = {
   username: "",
   password: "",
   admin: false,
+  description: "",
+  note: "",
   confirm: false,
 };
 
@@ -102,6 +104,7 @@ const UserForm = (props: Props) => {
             })
           );
         }
+        break;
       }
       case "delete": {
         try {
@@ -127,6 +130,7 @@ const UserForm = (props: Props) => {
             })
           );
         }
+        break;
       }
     }
   };
@@ -165,7 +169,7 @@ const UserForm = (props: Props) => {
                 />
               </Grid>
               <Grid item lg={7} />
-              <Grid item lg>
+              <Grid item lg={5}>
                 <TextField
                   id="username"
                   label="帳號"
@@ -176,7 +180,7 @@ const UserForm = (props: Props) => {
                   helperText={errors.username && "請輸入帳號"}
                 />
               </Grid>
-              <Grid item lg>
+              <Grid item lg={5}>
                 <TextField
                   id="password"
                   label="密碼"
@@ -186,6 +190,24 @@ const UserForm = (props: Props) => {
                   disabled={type === "watch"}
                   error={Boolean(errors.password)}
                   helperText={errors.password && "請輸入密碼"}
+                />
+              </Grid>
+              <Grid item lg={12}>
+                <TextField
+                  id="description"
+                  label="描述"
+                  fullWidth
+                  {...register("description")}
+                  disabled={type === "watch"}
+                />
+              </Grid>
+              <Grid item lg={12}>
+                <TextField
+                  id="note"
+                  label="備註"
+                  fullWidth
+                  {...register("note")}
+                  disabled={type === "watch"}
                 />
               </Grid>
             </Grid>
