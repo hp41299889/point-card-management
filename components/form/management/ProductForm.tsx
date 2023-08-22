@@ -22,9 +22,9 @@ import {
   patchProductById,
   deleteProductById,
 } from "@/utils/client/api/product";
-import { useGames } from "@/components/table/hook";
 import { useDispatch } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
+import { Game } from "@/pages/api/game/interface";
 
 interface FormData extends PostProduct {
   confirm: boolean;
@@ -32,6 +32,9 @@ interface FormData extends PostProduct {
 
 interface Props extends FormProps {
   data: Product | null;
+  fields: {
+    games: Game[];
+  };
 }
 
 const initData: FormData = {
@@ -43,13 +46,9 @@ const initData: FormData = {
 };
 
 const ProductForm = (props: Props) => {
-  const { open, type, data, onClose, afterAction } = props;
+  const { open, type, data, fields, onClose, afterAction } = props;
+  const { games } = fields;
   const dispatch = useDispatch();
-  const {
-    data: games,
-    fetcher: fetchGames,
-    loading: loadingGames,
-  } = useGames();
   const {
     control,
     handleSubmit,
@@ -149,10 +148,6 @@ const ProductForm = (props: Props) => {
     data ? reset({ ...data }) : reset(initData);
   }, [data, reset]);
 
-  useEffect(() => {
-    fetchGames();
-  }, [fetchGames]);
-
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>
@@ -194,7 +189,6 @@ const ProductForm = (props: Props) => {
                     <Autocomplete
                       id="gameId"
                       options={games}
-                      loading={loadingGames}
                       value={games.find((g) => g.id === value) || null}
                       onChange={(_, v) => onChange(v?.id ? v.id : 0)}
                       isOptionEqualToValue={(option, value) =>

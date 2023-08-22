@@ -28,18 +28,15 @@ import {
   patchOrderByUid,
   deleteOrderByUid,
 } from "@/utils/client/api/order";
-import {
-  useCustomers,
-  useGames,
-  useMachines,
-  usePayments,
-  useProducts,
-} from "@/components/table/hook";
 import { useDispatch, useSelector } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 import { Product } from "@/pages/api/product/interface";
 import { getProductsByGameId } from "@/utils/client/api/product";
 import { selectUser } from "@/utils/client/redux/user";
+import { Payment } from "@/pages/api/payment/interface";
+import { Customer } from "@/pages/api/customer/interface";
+import { Machine } from "@/pages/api/machine/interface";
+import { Game } from "@/pages/api/game/interface";
 
 interface FormData extends PostOrder {
   confirm: boolean;
@@ -47,6 +44,12 @@ interface FormData extends PostOrder {
 
 interface Props extends FormProps {
   data: Order | null;
+  fields: {
+    payments: Payment[];
+    customers: Customer[];
+    machines: Machine[];
+    games: Game[];
+  };
 }
 
 const initData: FormData = {
@@ -65,33 +68,14 @@ const initData: FormData = {
 };
 
 const OrderForm = (props: Props) => {
-  const { open, type, data, onClose, afterAction } = props;
+  const { open, type, data, fields, onClose, afterAction } = props;
+  const { payments, customers, machines, games } = fields;
   const [products, setProducts] = useState<Product[]>([]);
   const [cost1, setCost1] = useState<number>(0);
   const [cost2, setCost2] = useState<number>(0);
   const [equal, setEqual] = useState<number>(0);
   const [gameId, setGameId] = useState<number>(0);
   const dispatch = useDispatch();
-  const {
-    data: payments,
-    fetcher: fetchPayments,
-    loading: loadingPayments,
-  } = usePayments();
-  const {
-    data: customers,
-    fetcher: fetchCustomers,
-    loading: loadingCustomers,
-  } = useCustomers();
-  const {
-    data: machines,
-    fetcher: fetchMachines,
-    loading: loadingMachines,
-  } = useMachines();
-  const {
-    data: games,
-    fetcher: fetchGames,
-    loading: loadingGames,
-  } = useGames();
 
   const {
     control,
@@ -217,13 +201,6 @@ const OrderForm = (props: Props) => {
   };
 
   useEffect(() => {
-    fetchPayments();
-    fetchMachines();
-    fetchCustomers();
-    fetchGames();
-  }, [fetchPayments, fetchMachines, fetchCustomers, fetchGames]);
-
-  useEffect(() => {
     if (data) {
       const cost = data?.cost;
       const splited = cost?.split(",");
@@ -275,7 +252,6 @@ const OrderForm = (props: Props) => {
                     <Autocomplete
                       id="paymentId"
                       options={payments}
-                      loading={loadingPayments}
                       value={payments.find((g) => g.id === value) || null}
                       onChange={(_, v) => onChange(v?.id ? v.id : 0)}
                       isOptionEqualToValue={(option, value) =>
@@ -306,7 +282,6 @@ const OrderForm = (props: Props) => {
                 <Autocomplete
                   id="game"
                   options={games}
-                  loading={loadingGames}
                   value={games.find((g) => g.id === gameId) || null}
                   isOptionEqualToValue={(option, value) =>
                     option.id === value.id
@@ -382,7 +357,6 @@ const OrderForm = (props: Props) => {
                     <Autocomplete
                       id="customerId"
                       options={customers}
-                      loading={loadingCustomers}
                       value={customers.find((g) => g.id === value) || null}
                       onChange={(_, v) => onChange(v?.id ? v.id : 0)}
                       isOptionEqualToValue={(option, value) =>
@@ -421,7 +395,6 @@ const OrderForm = (props: Props) => {
                     <Autocomplete
                       id="machineId"
                       options={machines}
-                      loading={loadingMachines}
                       value={machines.find((g) => g.id === value) || null}
                       onChange={(_, v) => onChange(v?.id ? v.id : 0)}
                       isOptionEqualToValue={(option, value) =>

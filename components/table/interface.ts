@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, Dispatch, SetStateAction } from "react";
 
 export interface TableMetadata {
   key: string;
@@ -10,7 +10,8 @@ export interface TableMetadata {
 export interface TableHook<T> {
   (): {
     data: T[];
-    fetcher: () => Promise<void>;
+    fetcher: (q?: object) => Promise<void>;
+    setData?: Dispatch<SetStateAction<T[]>>;
     loading: boolean;
   };
 }

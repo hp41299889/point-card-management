@@ -3,7 +3,7 @@ import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
-import { useProducts } from "@/components/table/hook";
+import { useGames, useProducts } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import ProductForm from "@/components/form/management/ProductForm";
 import { Product } from "../api/product/interface";
@@ -36,6 +36,7 @@ const metadata: TableMetadata[] = [
 
 const Page = () => {
   const { data, fetcher, loading } = useProducts();
+  const { data: games } = useGames();
   const [selected, setSelected] = useState<Data>(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
@@ -91,6 +92,7 @@ const Page = () => {
         open={formModal}
         type={formType}
         data={selected}
+        fields={{ games }}
         onClose={onClose}
         afterAction={fetcher}
       />
