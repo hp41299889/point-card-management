@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -33,16 +33,18 @@ interface Props {
     User | Customer | Payment | Machine | Product | Game | Order
   >;
   Form: React.ComponentType<FormProps>;
+  extraRow?: (data: Array<any>) => JSX.Element;
 }
 
 const ManagementTable = (props: Props) => {
-  const { title, metadata, useData, Form } = props;
+  const { title, metadata, useData, Form, extraRow } = props;
   const { data, fetcher, loading } = useData();
   const [selected, setSelected] = useState<
     User | Customer | Payment | Machine | Game | Product | Order | null
   >(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
+  console.log(data);
 
   const onClose = () => {
     setFormModal(false);
@@ -170,6 +172,28 @@ const ManagementTable = (props: Props) => {
                     </TableCell>
                   </TableRow>
                 ))}
+                {/* <TableRow>
+                  {metadata.map((m, index) => (
+                    <>
+                      {m.key !== "cost" && m.key !== "machine.name" && (
+                        <TableCell />
+                      )}
+                      {m.key === "machine.name" && (
+                        <TableCell key={`e_${m.key}_${index}`}>總計</TableCell>
+                      )}
+                      {m.key === "cost" && (
+                        <TableCell>
+                          {data.reduce((pre, cur) => {
+                            const cost: string = cur.cost;
+                            const multy = cost.split(",")[2];
+                            return pre + Number(multy);
+                          }, 0)}
+                        </TableCell>
+                      )}
+                    </>
+                  ))}
+                </TableRow> */}
+                {extraRow && extraRow(data)}
               </TableBody>
             </Table>
           </TableContainer>

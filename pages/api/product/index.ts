@@ -14,7 +14,7 @@ const handler = async (
       case "GET": {
         const { query } = req;
         const gameId = Number(query.gameId);
-        if (gameId) {
+        if (!isNaN(gameId)) {
           try {
             const products = await prisma.product.findMany({
               where: { gameId },

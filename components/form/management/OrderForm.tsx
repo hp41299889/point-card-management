@@ -53,7 +53,7 @@ const initData: FormData = {
   amount: 0,
   cost: "",
   price: 0,
-  status: "",
+  status: "正常",
   description: "",
   note: "",
   userId: 0,
@@ -70,6 +70,7 @@ const OrderForm = (props: Props) => {
   const [cost1, setCost1] = useState<number>(0);
   const [cost2, setCost2] = useState<number>(0);
   const [equal, setEqual] = useState<number>(0);
+  const [gameId, setGameId] = useState<number>(0);
   const dispatch = useDispatch();
   const {
     data: payments,
@@ -103,13 +104,12 @@ const OrderForm = (props: Props) => {
   } = useForm<FormData>({ defaultValues: initData });
 
   const user = useSelector(selectUser);
-  console.log(user);
 
   const onSubmit = async (formData: FormData) => {
     const { confirm, ...payload } = formData;
     const cost = `${cost1},${cost2},${equal}`;
     payload.cost = cost;
-    payload.userId = 1;
+    payload.userId = user.id;
     payload.amount = Number(payload.amount);
     payload.price = Number(payload.price);
     switch (type) {
@@ -143,7 +143,20 @@ const OrderForm = (props: Props) => {
       case "edit": {
         try {
           setValue("confirm", true);
-          const res = await patchOrderByUid(data?.uid!, payload);
+          // TODO use find
+          const patch: PatchOrder = {
+            cost: payload.cost,
+            price: payload.price,
+            status: payload.status,
+            description: payload.description,
+            note: payload.note,
+            userId: payload.userId,
+            paymentId: payload.paymentId,
+            productId: payload.productId,
+            machineId: payload.machineId,
+            customerId: payload.customerId,
+          };
+          const res = await patchOrderByUid(data?.uid!, patch);
           if (res.data.status === "success") {
             onClose();
             dispatch(
@@ -204,15 +217,33 @@ const OrderForm = (props: Props) => {
   };
 
   useEffect(() => {
-    data ? reset({ ...data }) : reset(initData);
-  }, [data, reset]);
-
-  useEffect(() => {
     fetchPayments();
     fetchMachines();
     fetchCustomers();
     fetchGames();
   }, [fetchPayments, fetchMachines, fetchCustomers, fetchGames]);
+
+  useEffect(() => {
+    if (data) {
+      const cost = data?.cost;
+      const splited = cost?.split(",");
+      reset({ ...data });
+      setGameId(data.product.gameId);
+      setCost1(Number(splited[0]));
+      setCost2(Number(splited[1]));
+      setEqual(Number(splited[2]));
+    } else {
+      reset(initData);
+      setGameId(0);
+      setCost1(0);
+      setCost2(0);
+      setEqual(0);
+    }
+  }, [data, reset]);
+
+  useEffect(() => {
+    fetchProducts(gameId);
+  }, [gameId]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -272,17 +303,23 @@ const OrderForm = (props: Props) => {
               </Grid>
               <Grid item lg={7} />
               <Grid item lg={5}>
-                {/* TODO 關閉modal不會重製product */}
                 <Autocomplete
                   id="game"
                   options={games}
                   loading={loadingGames}
+                  value={games.find((g) => g.id === gameId) || null}
                   isOptionEqualToValue={(option, value) =>
                     option.id === value.id
                   }
-                  onChange={(_, g) =>
-                    g?.id ? fetchProducts(g.id) : setProducts([])
-                  }
+                  onChange={(_, g) => {
+                    if (g?.id) {
+                      setGameId(g?.id);
+                      fetchProducts(g.id);
+                    } else {
+                      setGameId(0);
+                      setProducts([]);
+                    }
+                  }}
                   getOptionLabel={(o) => o.name}
                   renderOption={(props, option) => (
                     <li key={`productOption_${option.id}`} {...props}>
@@ -491,10 +528,11 @@ const OrderForm = (props: Props) => {
                 <Controller
                   name="status"
                   control={control}
-                  render={({ field: { onChange } }) => (
+                  rules={{ required: "請選擇狀態" }}
+                  render={({ field: { onChange, value } }) => (
                     <FormControl fullWidth disabled={type === "watch"}>
                       <InputLabel>狀態</InputLabel>
-                      <Select label="狀態" onChange={onChange}>
+                      <Select label="狀態" onChange={onChange} value={value}>
                         <MenuItem value="正常">正常</MenuItem>
                         <MenuItem value="異常">異常</MenuItem>
                       </Select>
