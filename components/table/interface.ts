@@ -8,5 +8,9 @@ export interface TableMetadata {
 }
 
 export interface TableHook<T> {
-  (): { data: T[]; fetcher: () => Promise<void>; loading: boolean };
+  (): {
+    data: T[];
+    fetcher: () => Promise<void>;
+    loading: boolean;
+  };
 }

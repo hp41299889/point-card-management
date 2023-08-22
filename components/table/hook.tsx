@@ -39,7 +39,7 @@ export const useUsers: TableHook<User> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const useCustomers: TableHook<Customer> = () => {
@@ -63,7 +63,7 @@ export const useCustomers: TableHook<Customer> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const useMachines: TableHook<Machine> = () => {
@@ -87,7 +87,7 @@ export const useMachines: TableHook<Machine> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const useGames: TableHook<Game> = () => {
@@ -111,7 +111,7 @@ export const useGames: TableHook<Game> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const usePayments: TableHook<Payment> = () => {
@@ -135,7 +135,7 @@ export const usePayments: TableHook<Payment> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const useProducts: TableHook<Product> = () => {
@@ -159,7 +159,7 @@ export const useProducts: TableHook<Product> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };
 
 export const useOrders: TableHook<Order> = () => {
@@ -183,5 +183,5 @@ export const useOrders: TableHook<Order> = () => {
     fetcher();
   }, [fetcher]);
 
-  return { data, fetcher, loading };
+  return { data, setData, fetcher, loading };
 };

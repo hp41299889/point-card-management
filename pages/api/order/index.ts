@@ -15,6 +15,7 @@ const handler = async (
         try {
           const orders = await prisma.order.findMany({
             include: {
+              user: true,
               payment: true,
               product: {
                 include: {
