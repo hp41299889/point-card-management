@@ -36,7 +36,7 @@ interface Props {
 
 const initData: FormData = {
   startAt: null,
-  endAt: dayjs(),
+  endAt: null,
   gameId: 0,
   productId: 0,
   paymentId: 0,
