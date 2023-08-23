@@ -34,7 +34,15 @@ export const App = (props: AppProps) => {
   return (
     <CssVarsProvider theme={theme}>
       <Providers>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{
+            okButtonLabel: "確認",
+            todayButtonLabel: "現在",
+            clearButtonLabel: "清除",
+            cancelButtonLabel: "取消",
+          }}
+        >
           <GlobalComponent>
             {router.pathname === "/" ? (
               <Component {...pageProps} />

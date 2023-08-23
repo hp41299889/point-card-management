@@ -16,6 +16,7 @@ import {
   useMachines,
   useOrders,
   usePayments,
+  useProducts,
 } from "@/components/table/hook";
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
@@ -63,14 +64,13 @@ const metadata: TableMetadata[] = [
 
 const Page = () => {
   const { data, fetcher, loading } = useOrders();
+  const { data: products } = useProducts();
   const { data: payments } = usePayments();
   const { data: customers } = useCustomers();
   const { data: machines } = useMachines();
   const { data: games } = useGames();
 
   //TODO
-  const [orders, setOrders] = useState<Order[]>(data);
-  console.log(orders);
   const [selected, setSelected] = useState<Data>(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
@@ -131,7 +131,10 @@ const Page = () => {
     <Box>
       <Typography variant="h6">管理員</Typography>
       <Divider />
-      <OrderSeachForm fileds={{ payments, customers, machines }} />
+      <OrderSeachForm
+        fetcher={fetcher}
+        fileds={{ games, products, payments, customers, machines }}
+      />
       <Divider />
       {loading ? (
         <CircularProgress />
@@ -139,7 +142,7 @@ const Page = () => {
         <ManagementTable<Order>
           title="用戶管理"
           metadata={metadata}
-          datas={orders}
+          datas={data}
           onClickData={{
             onNew: onClickNewData,
             onWatch: onClickWatchData,

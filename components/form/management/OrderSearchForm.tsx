@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Box, Button, Stack, Autocomplete, TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
@@ -8,17 +9,25 @@ import { Customer } from "@/pages/api/customer/interface";
 import { Machine } from "@/pages/api/machine/interface";
 import { getOrders } from "@/utils/client/api/order";
 import { useOrders } from "@/components/table/hook";
+import { Game } from "@/pages/api/game/interface";
+import { Product } from "@/pages/api/product/interface";
+import { getProductsByGameId } from "@/utils/client/api/product";
 
 interface FormData {
   startAt: Dayjs | null;
   endAt: Dayjs | null;
+  gameId: number;
+  productId: number;
   paymentId: number;
   customerId: number;
   machineId: number;
 }
 
 interface Props {
+  fetcher: (q?: object | undefined) => Promise<void>;
   fileds: {
+    games: Game[];
+    products: Product[];
     payments: Payment[];
     customers: Customer[];
     machines: Machine[];
@@ -28,23 +37,52 @@ interface Props {
 const initData: FormData = {
   startAt: null,
   endAt: dayjs(),
+  gameId: 0,
+  productId: 0,
   paymentId: 0,
   customerId: 0,
   machineId: 0,
 };
 
 const OrderSeachForm = (props: Props) => {
-  const { fileds } = props;
-  const { payments, customers, machines } = fileds;
-  const { fetcher } = useOrders();
+  const { fileds, fetcher } = props;
+  const {
+    games,
+    products: allProducts,
+    payments,
+    customers,
+    machines,
+  } = fileds;
+  const [products, setProducts] = useState<Product[]>([]);
 
   const { control, handleSubmit } = useForm<FormData>({
     defaultValues: initData,
   });
 
+  const fetchProducts = async (gameId: number) => {
+    const res = await getProductsByGameId(gameId);
+    if (res.data.status === "success") {
+      setProducts(res.data.data);
+    }
+  };
+
+  useEffect(() => {
+    setProducts(allProducts);
+  }, []);
+
   const onSubmit = async (formData: FormData) => {
-    const { paymentId, customerId, machineId, startAt, endAt } = formData;
+    const {
+      gameId,
+      productId,
+      paymentId,
+      customerId,
+      machineId,
+      startAt,
+      endAt,
+    } = formData;
     const query = {
+      gameId: gameId ? gameId : undefined,
+      productId: productId ? productId : undefined,
       paymentId: paymentId ? paymentId : undefined,
       customerId: customerId ? customerId : undefined,
       machineId: machineId ? machineId : undefined,
@@ -67,10 +105,12 @@ const OrderSeachForm = (props: Props) => {
               ampm={false}
               format="YYYY-MM-DD HH:mm:ss"
               views={["year", "month", "day", "hours", "minutes", "seconds"]}
+              slotProps={{
+                actionBar: { actions: ["today", "clear", "accept", "cancel"] },
+              }}
             />
           )}
         />
-        -
         <Controller
           control={control}
           name="endAt"
@@ -81,6 +121,9 @@ const OrderSeachForm = (props: Props) => {
               ampm={false}
               format="YYYY-MM-DD HH:mm:ss"
               views={["year", "month", "day", "hours", "minutes", "seconds"]}
+              slotProps={{
+                actionBar: { actions: ["today", "clear", "accept", "cancel"] },
+              }}
             />
           )}
         />
@@ -97,6 +140,44 @@ const OrderSeachForm = (props: Props) => {
               renderInput={(params) => (
                 <TextField {...params} label="支付方式" />
               )}
+              sx={{ width: "180px" }}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="gameId"
+          render={({ field: { onChange, value } }) => (
+            <Autocomplete
+              id="gameId"
+              value={games.find((g) => g.id === value) || null}
+              onChange={(_, v) => {
+                if (v?.id) {
+                  onChange(v.id);
+                  fetchProducts(v.id);
+                } else {
+                  onChange(0);
+                  setProducts(allProducts);
+                }
+              }}
+              options={games}
+              getOptionLabel={(o) => o.name}
+              renderInput={(params) => <TextField {...params} label="遊戲" />}
+              sx={{ width: "180px" }}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="productId"
+          render={({ field: { onChange, value } }) => (
+            <Autocomplete
+              id="productId"
+              value={products.find((p) => p.id === value) || null}
+              onChange={(_, v) => onChange(v?.id || 0)}
+              options={products}
+              getOptionLabel={(o) => o.name}
+              renderInput={(params) => <TextField {...params} label="項目" />}
               sx={{ width: "180px" }}
             />
           )}
