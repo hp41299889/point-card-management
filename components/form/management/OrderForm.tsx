@@ -87,13 +87,11 @@ const OrderForm = (props: Props) => {
     formState: { errors },
   } = useForm<FormData>({ defaultValues: initData });
 
-  const user = useSelector(selectUser);
-
   const onSubmit = async (formData: FormData) => {
     const { confirm, ...payload } = formData;
     const cost = `${cost1},${cost2},${equal}`;
     payload.cost = cost;
-    payload.userId = user.id;
+    payload.userId = Number(localStorage.getItem("userId"));
     payload.amount = Number(payload.amount);
     payload.price = Number(payload.price);
     switch (type) {

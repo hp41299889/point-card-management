@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import {
   Box,
   Divider,
@@ -107,11 +107,9 @@ const Page = () => {
   const extraRow = (data: Order[]) => (
     <TableRow>
       {metadata.map((m, i) => (
-        <>
+        <Fragment key={`e_${m.key}_${i}`}>
           {m.key !== "cost" && m.key !== "machine.name" && <TableCell />}
-          {m.key === "machine.name" && (
-            <TableCell key={`e_${m.key}_${i}`}>總計</TableCell>
-          )}
+          {m.key === "machine.name" && <TableCell>總計</TableCell>}
           {m.key === "cost" && (
             <TableCell>
               {data.reduce((pre, cur) => {
@@ -121,7 +119,7 @@ const Page = () => {
               }, 0)}
             </TableCell>
           )}
-        </>
+        </Fragment>
       ))}
       <TableCell />
     </TableRow>
@@ -129,7 +127,7 @@ const Page = () => {
 
   return (
     <Box>
-      <Typography variant="h6">管理員</Typography>
+      <Typography variant="h6">訂單管理</Typography>
       <Divider />
       <OrderSeachForm
         fetcher={fetcher}
@@ -140,7 +138,7 @@ const Page = () => {
         <CircularProgress />
       ) : (
         <ManagementTable<Order>
-          title="用戶管理"
+          title="order"
           metadata={metadata}
           datas={data}
           onClickData={{
