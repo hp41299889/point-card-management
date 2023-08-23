@@ -13,7 +13,30 @@ const handler = async (
     switch (method) {
       case "GET": {
         try {
+          const { query } = req;
+          const {
+            paymentId,
+            customerId,
+            machineId,
+            gameId,
+            productId,
+            startAt,
+            endAt,
+          } = query;
           const orders = await prisma.order.findMany({
+            where: {
+              product: {
+                gameId: gameId ? Number(gameId) : undefined,
+              },
+              productId: productId ? Number(productId) : undefined,
+              paymentId: paymentId ? Number(paymentId) : undefined,
+              customerId: customerId ? Number(customerId) : undefined,
+              machineId: machineId ? Number(machineId) : undefined,
+              createdAt: {
+                gte: startAt ? new Date(String(startAt)) : undefined,
+                lte: endAt ? new Date(String(endAt)) : undefined,
+              },
+            },
             include: {
               user: true,
               payment: true,

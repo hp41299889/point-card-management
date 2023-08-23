@@ -10,11 +10,19 @@ import {
 
 import OrderForm from "@/components/form/management/OrderForm";
 import ManagementTable from "@/components/table/ManagementTable";
-import { useOrders } from "@/components/table/hook";
+import {
+  useCustomers,
+  useGames,
+  useMachines,
+  useOrders,
+  usePayments,
+  useProducts,
+} from "@/components/table/hook";
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import { Order } from "../api/order/interface";
 import { FormType } from "@/components/form/management/interface";
+import OrderSeachForm from "@/components/form/management/OrderSearchForm";
 
 type Data = Order | null;
 
@@ -56,6 +64,13 @@ const metadata: TableMetadata[] = [
 
 const Page = () => {
   const { data, fetcher, loading } = useOrders();
+  const { data: products } = useProducts();
+  const { data: payments } = usePayments();
+  const { data: customers } = useCustomers();
+  const { data: machines } = useMachines();
+  const { data: games } = useGames();
+
+  //TODO
   const [selected, setSelected] = useState<Data>(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
@@ -88,6 +103,7 @@ const Page = () => {
     setSelected(data);
     setFormModal(true);
   };
+
   const extraRow = (data: Order[]) => (
     <TableRow>
       {metadata.map((m, i) => (
@@ -107,11 +123,18 @@ const Page = () => {
           )}
         </>
       ))}
+      <TableCell />
     </TableRow>
   );
+
   return (
     <Box>
       <Typography variant="h6">管理員</Typography>
+      <Divider />
+      <OrderSeachForm
+        fetcher={fetcher}
+        fileds={{ games, products, payments, customers, machines }}
+      />
       <Divider />
       {loading ? (
         <CircularProgress />
@@ -126,12 +149,19 @@ const Page = () => {
             onEdit: onClickEditData,
             onDelete: onClickDeleteData,
           }}
+          extraRow={extraRow}
         />
       )}
       <OrderForm
         open={formModal}
         type={formType}
         data={selected}
+        fields={{
+          payments,
+          customers,
+          machines,
+          games,
+        }}
         onClose={onClose}
         afterAction={fetcher}
       />
