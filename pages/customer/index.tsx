@@ -70,13 +70,13 @@ const Page = () => {
 
   return (
     <Box>
-      <Typography variant="h6">管理員</Typography>
+      <Typography variant="h6">客源管理</Typography>
       <Divider />
       {loading ? (
         <CircularProgress />
       ) : (
         <ManagementTable<Customer>
-          title="用戶管理"
+          title="customer"
           metadata={metadata}
           datas={data}
           onClickData={{

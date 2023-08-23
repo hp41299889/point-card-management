@@ -23,11 +23,12 @@ const Page = () => {
     try {
       const res = await postAuth(payload);
       if (res.data.status === "success") {
-        const { token, user }: { token: string; user: UserSlice } =
-          res.data.data;
+        const { token, user }: { token: string; user: User } = res.data.data;
         localStorage.setItem("token", token);
-        console.log(user);
-        dispatch(setUser(user));
+        localStorage.setItem("user", user.name);
+        localStorage.setItem("userId", String(user.id));
+        localStorage.setItem("role", user.name === "admin" ? "admin" : "user");
+        // dispatch(setUser(user));
         dispatch(
           setAppFeedbackSnackbar({
             type: "success",

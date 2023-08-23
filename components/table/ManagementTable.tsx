@@ -9,21 +9,11 @@ import {
   IconButton,
   Stack,
   Box,
-  Typography,
   Tooltip,
 } from "@mui/material";
 import { Add, Delete, Edit, Visibility } from "@mui/icons-material";
 
-import { TableMetadata } from "./interface";
-import { User } from "@/pages/api/user/interface";
-import { Customer } from "@/pages/api/customer/interface";
-import { Payment } from "@/pages/api/payment/interface";
-import { Machine } from "@/pages/api/machine/interface";
-import { Game } from "@/pages/api/game/interface";
-import { Product } from "@/pages/api/product/interface";
-import { Order } from "@/pages/api/order/interface";
-
-type Data = User | Customer | Payment | Machine | Product | Game | Order;
+import { TableMetadata, TableData } from "./interface";
 
 interface Props<T> {
   title: string;
@@ -38,7 +28,7 @@ interface Props<T> {
   extraRow?: (data: Array<any>) => JSX.Element;
 }
 
-const ManagementTable = <T extends Data>(props: Props<T>) => {
+const ManagementTable = <T extends TableData>(props: Props<T>) => {
   const { title, metadata, datas, onClickData, extraRow } = props;
   const { onNew, onWatch, onEdit, onDelete } = onClickData;
 
@@ -57,14 +47,13 @@ const ManagementTable = <T extends Data>(props: Props<T>) => {
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between">
-        <Typography>{title}</Typography>
-        <Stack direction="row">
+        <Box paddingY="6px">
           <Tooltip title="新增">
             <Button variant="contained" startIcon={<Add />} onClick={onNew}>
               新增
             </Button>
           </Tooltip>
-        </Stack>
+        </Box>
       </Stack>
       <TableContainer>
         <Table size="small">

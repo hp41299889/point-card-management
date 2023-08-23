@@ -22,6 +22,9 @@ const request = (baseURL = ""): AxiosInstance => {
         (e.response.status === 401 || e.response.status === 403)
       ) {
         window.location.href = "/";
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("userId");
       }
       return Promise.reject(e);
     }
