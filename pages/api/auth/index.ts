@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
-import "dotenv/config";
+import { SignJWT } from "jose";
+import { nanoid } from "nanoid";
 
 import { ApiResponse, prisma } from "@/utils/server";
 import { PostAuth } from "./interface";
-
-const SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : "jwt";
+import { SECRET } from "@/utils/server";
 
 const handler = async (
   req: NextApiRequest,
@@ -33,11 +32,12 @@ const handler = async (
                 status: "success",
                 message: "login success",
                 data: {
-                  token: sign(
-                    { username, role: user.admin ? "admin" : "user" },
-                    SECRET,
-                    { expiresIn: "1h" }
-                  ),
+                  token: await new SignJWT({})
+                    .setProtectedHeader({ alg: "HS256" })
+                    .setJti(nanoid())
+                    .setIssuedAt()
+                    .setExpirationTime("2h")
+                    .sign(new TextEncoder().encode(SECRET)),
                   user,
                 },
               })
