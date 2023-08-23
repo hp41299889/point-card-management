@@ -166,10 +166,10 @@ export const useOrders: TableHook<Order> = () => {
   const [data, setData] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetcher = useCallback(async () => {
+  const fetcher = useCallback(async (q?: object | undefined) => {
     setLoading(true);
     try {
-      const res = await getOrders();
+      const res = await getOrders(q);
       if (res.data.status === "success") {
         setData(res.data.data);
       }

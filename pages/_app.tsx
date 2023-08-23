@@ -3,11 +3,17 @@ import {
   Experimental_CssVarsProvider as CssVarsProvider,
   experimental_extendTheme as extendTheme,
 } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-tw";
 
 import "@/styles/style.css";
 import Layout from "@/components/layout/Layout";
 import { Providers } from "@/utils/client/redux/provider";
 import GlobalComponent from "@/components/global/GlobalComponent";
+
+dayjs.locale("zh-tw");
 
 const theme = extendTheme({
   components: {
@@ -28,15 +34,25 @@ export const App = (props: AppProps) => {
   return (
     <CssVarsProvider theme={theme}>
       <Providers>
-        <GlobalComponent>
-          {router.pathname === "/" ? (
-            <Component {...pageProps} />
-          ) : (
-            <Layout>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{
+            okButtonLabel: "確認",
+            todayButtonLabel: "現在",
+            clearButtonLabel: "清除",
+            cancelButtonLabel: "取消",
+          }}
+        >
+          <GlobalComponent>
+            {router.pathname === "/" ? (
               <Component {...pageProps} />
-            </Layout>
-          )}
-        </GlobalComponent>
+            ) : (
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            )}
+          </GlobalComponent>
+        </LocalizationProvider>
       </Providers>
     </CssVarsProvider>
   );

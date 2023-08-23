@@ -3,8 +3,8 @@ import { PostOrder, PatchOrder } from "@/pages/api/order/interface";
 
 const route = "/order";
 
-export const getOrders = async () => {
-  return api.get(route);
+export const getOrders = async (query?: object) => {
+  return api.get(route, { params: query });
 };
 
 export const postOrder = async (payload: PostOrder) => {

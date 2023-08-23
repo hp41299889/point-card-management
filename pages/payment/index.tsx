@@ -1,10 +1,15 @@
-import { Box, Typography, Divider } from "@mui/material";
+import { useState } from "react";
+import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
 import { usePayments } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import PaymentForm from "@/components/form/management/PaymentForm";
+import { Payment } from "../api/payment/interface";
+import { FormType } from "@/components/form/management/interface";
+
+type Data = Payment | null;
 
 const metadata: TableMetadata[] = [
   {
@@ -29,15 +34,64 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
+  const { data, fetcher, loading } = usePayments();
+  const [selected, setSelected] = useState<Data>(null);
+  const [formType, setFormType] = useState<FormType>("create");
+  const [formModal, setFormModal] = useState<boolean>(false);
+
+  const onClose = () => {
+    setFormModal(false);
+    setSelected(null);
+  };
+
+  const onClickNewData = () => {
+    setFormType("create");
+    setSelected(null);
+    setFormModal(true);
+  };
+
+  const onClickWatchData = (data: Data) => {
+    setFormType("watch");
+    setSelected(data);
+    setFormModal(true);
+  };
+
+  const onClickEditData = (data: Data) => {
+    setFormType("edit");
+    setSelected(data);
+    setFormModal(true);
+  };
+
+  const onClickDeleteData = (data: Data) => {
+    setFormType("delete");
+    setSelected(data);
+    setFormModal(true);
+  };
   return (
     <Box>
-      <Typography variant="h6">支付方式管理</Typography>
+      <Typography variant="h6">管理員</Typography>
       <Divider />
-      <ManagementTable
-        title="支付方式管理"
-        metadata={metadata}
-        useData={usePayments}
-        Form={PaymentForm}
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <ManagementTable<Payment>
+          title="用戶管理"
+          metadata={metadata}
+          datas={data}
+          onClickData={{
+            onNew: onClickNewData,
+            onWatch: onClickWatchData,
+            onEdit: onClickEditData,
+            onDelete: onClickDeleteData,
+          }}
+        />
+      )}
+      <PaymentForm
+        open={formModal}
+        type={formType}
+        data={selected}
+        onClose={onClose}
+        afterAction={fetcher}
       />
     </Box>
   );
