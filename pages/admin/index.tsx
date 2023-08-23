@@ -76,7 +76,7 @@ const Page = () => {
         <CircularProgress />
       ) : (
         <ManagementTable<User>
-          title="用戶管理"
+          title="admin"
           metadata={metadata}
           datas={data}
           onClickData={{

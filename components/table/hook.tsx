@@ -185,3 +185,7 @@ export const useOrders: TableHook<Order> = () => {
 
   return { data, setData, fetcher, loading };
 };
+
+export const useTableModal = <T,>(useData: TableHook<T>) => {
+  const { data, fetcher, loading } = useData();
+};

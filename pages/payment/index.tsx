@@ -69,13 +69,13 @@ const Page = () => {
   };
   return (
     <Box>
-      <Typography variant="h6">管理員</Typography>
+      <Typography variant="h6">支付方式管理</Typography>
       <Divider />
       {loading ? (
         <CircularProgress />
       ) : (
         <ManagementTable<Payment>
-          title="用戶管理"
+          title="payment"
           metadata={metadata}
           datas={data}
           onClickData={{

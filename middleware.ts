@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verify } from "jsonwebtoken";
+
 import { ApiResponse } from "./utils/server";
+import { verifyAuth } from "./utils/server/auth";
+
+const SECRET = process.env.JWT_SECRET || "jwt_secret";
 
 const authRoutes = [
   "/api/user",
@@ -11,14 +16,17 @@ const authRoutes = [
   "/api/order",
 ];
 
-export const middleware = (req: NextRequest) => {
+export const middleware = async (req: NextRequest) => {
   if (authRoutes.includes(req.nextUrl.pathname)) {
-    const token = req.headers.get("Authorization");
-    if (!token) {
-      return new NextResponse<ApiResponse>(
+    const verifiedToken = await verifyAuth(req).catch((err) => {
+      console.error(err);
+    });
+
+    if (!verifiedToken) {
+      return new NextResponse(
         JSON.stringify({
           status: "failed",
-          message: "authorization failed",
+          message: "auth failed",
           data: null,
         }),
         { status: 401 }

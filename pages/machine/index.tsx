@@ -67,15 +67,16 @@ const Page = () => {
     setSelected(data);
     setFormModal(true);
   };
+
   return (
     <Box>
-      <Typography variant="h6">管理員</Typography>
+      <Typography variant="h6">機台管理</Typography>
       <Divider />
       {loading ? (
         <CircularProgress />
       ) : (
         <ManagementTable<Machine>
-          title="用戶管理"
+          title="machine"
           metadata={metadata}
           datas={data}
           onClickData={{
