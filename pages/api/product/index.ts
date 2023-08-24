@@ -56,7 +56,7 @@ const handler = async (
       }
       case "POST": {
         const { body }: { body: PostProduct } = req;
-        const { ...payload } = body;
+        const { game, ...payload } = body;
         try {
           const createdProduct = await prisma.product.create({
             data: { ...payload },
