@@ -143,6 +143,7 @@ const OrderForm = (props: Props) => {
             machineId: payload.machineId,
             customerId: payload.customerId,
           };
+          console.log(patch);
           const res = await patchOrderByUid(data?.uid!, patch);
           if (res.data.status === "success") {
             onClose();
