@@ -28,7 +28,7 @@ type Data = Order | null;
 
 const costPreProcess = (cost: string) => {
   const splited = cost.split(",");
-  return `${splited[0]}*${splited[1]}=${splited[2]}`;
+  return `${splited[0]}*${splited[1]}*${splited[2]}`;
 };
 
 const metadata: TableMetadata[] = [
@@ -113,8 +113,9 @@ const Page = () => {
           {m.key === "cost" && (
             <TableCell>
               {data.reduce((pre, cur) => {
-                const cost: string = cur.cost;
-                const multy = cost.split(",")[2];
+                const cost = cur.cost.split(",");
+                const multy =
+                  Number(cost[0]) * Number(cost[1]) * Number(cost[2]);
                 return pre + Number(multy);
               }, 0)}
             </TableCell>
