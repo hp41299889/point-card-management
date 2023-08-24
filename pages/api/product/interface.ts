@@ -21,4 +21,5 @@ export interface PatchProduct {
   description?: string;
   note?: string;
   gameId?: number;
+  game?: Game;
 }

@@ -104,6 +104,7 @@ const OrderSeachForm = (props: Props) => {
               onChange={onChange}
               ampm={false}
               format="YYYY-MM-DD HH:mm:ss"
+              timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
               views={["year", "month", "day", "hours", "minutes", "seconds"]}
               slotProps={{
                 actionBar: { actions: ["today", "clear", "accept", "cancel"] },
@@ -120,6 +121,7 @@ const OrderSeachForm = (props: Props) => {
               onChange={onChange}
               ampm={false}
               format="YYYY-MM-DD HH:mm:ss"
+              timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
               views={["year", "month", "day", "hours", "minutes", "seconds"]}
               slotProps={{
                 actionBar: { actions: ["today", "clear", "accept", "cancel"] },

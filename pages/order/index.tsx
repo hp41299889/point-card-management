@@ -51,7 +51,7 @@ const metadata: TableMetadata[] = [
   {
     key: "createdAt",
     label: "建立日期",
-    preDisplay: (u) => toLocaleDateTime(u.updatedAt),
+    preDisplay: (u) => toLocaleDateTime(u.createdAt),
     width: "150px",
   },
   {
@@ -108,7 +108,9 @@ const Page = () => {
     <TableRow>
       {metadata.map((m, i) => (
         <Fragment key={`e_${m.key}_${i}`}>
-          {m.key !== "cost" && m.key !== "machine.name" && <TableCell />}
+          {m.key !== "cost" &&
+            m.key !== "machine.name" &&
+            m.key !== "price" && <TableCell />}
           {m.key === "machine.name" && <TableCell>總計</TableCell>}
           {m.key === "cost" && (
             <TableCell>
@@ -117,6 +119,13 @@ const Page = () => {
                 const multy =
                   Number(cost[0]) * Number(cost[1]) * Number(cost[2]);
                 return pre + Number(multy);
+              }, 0)}
+            </TableCell>
+          )}
+          {m.key === "price" && (
+            <TableCell>
+              {data.reduce((pre, cur) => {
+                return pre + cur.price;
               }, 0)}
             </TableCell>
           )}

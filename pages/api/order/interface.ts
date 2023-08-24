@@ -18,6 +18,9 @@ export interface PostOrder extends PatchOrder {
 }
 
 export interface PatchOrder {
+  uid?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   cost?: string;
   price?: number;
   status?: string;
