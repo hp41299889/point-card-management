@@ -17,6 +17,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Button,
 } from "@mui/material";
 
 import { FormProps } from "./interface";
@@ -28,11 +29,14 @@ import {
   patchOrderByUid,
   deleteOrderByUid,
 } from "@/utils/client/api/order";
-import { useDispatch, useSelector } from "@/utils/client/redux/store";
+import { useDispatch } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
-import { Product } from "@/pages/api/product/interface";
-import { getProductsByGameId } from "@/utils/client/api/product";
-import { selectUser } from "@/utils/client/redux/user";
+import { PostProduct, Product } from "@/pages/api/product/interface";
+import {
+  getProducts,
+  getProductsByGameId,
+  postProduct,
+} from "@/utils/client/api/product";
 import { Payment } from "@/pages/api/payment/interface";
 import { Customer } from "@/pages/api/customer/interface";
 import { Machine } from "@/pages/api/machine/interface";
@@ -73,8 +77,9 @@ const OrderForm = (props: Props) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [cost1, setCost1] = useState<number>(0);
   const [cost2, setCost2] = useState<number>(0);
-  const [equal, setEqual] = useState<number>(0);
+  const [cost3, setCost3] = useState<number>(0);
   const [gameId, setGameId] = useState<number>(0);
+  const [productName, setProductName] = useState<string>("");
   const dispatch = useDispatch();
 
   const {
@@ -89,7 +94,7 @@ const OrderForm = (props: Props) => {
 
   const onSubmit = async (formData: FormData) => {
     const { confirm, ...payload } = formData;
-    const cost = `${cost1},${cost2},${equal}`;
+    const cost = `${cost1},${cost2},${cost3}`;
     payload.cost = cost;
     payload.userId = Number(localStorage.getItem("userId"));
     payload.amount = Number(payload.amount);
@@ -191,10 +196,47 @@ const OrderForm = (props: Props) => {
     }
   };
 
-  const fetchProducts = async (gameId: number) => {
+  const fetchProductsByGameId = async (gameId: number) => {
     const res = await getProductsByGameId(gameId);
     if (res.data.status === "success") {
       setProducts(res.data.data);
+    }
+  };
+
+  const fetchProducts = async () => {
+    const res = await getProducts();
+    if (res.data.status === "success") {
+      setProducts(res.data.data);
+    }
+  };
+
+  const onSubmitProduct = async () => {
+    const payload: PostProduct = {
+      name: productName,
+      gameId: gameId,
+    };
+    try {
+      const res = await postProduct(payload);
+      if (res.data.status === "success") {
+        dispatch(
+          setAppFeedbackSnackbar({
+            open: true,
+            type: "success",
+            message: "新增項目成功！",
+          })
+        );
+        setValue("productId", res.data.data.id);
+        fetchProducts();
+      }
+    } catch (err) {
+      console.error(err);
+      dispatch(
+        setAppFeedbackSnackbar({
+          open: true,
+          type: "error",
+          message: "新增項目失敗！",
+        })
+      );
     }
   };
 
@@ -206,18 +248,18 @@ const OrderForm = (props: Props) => {
       setGameId(data.product.gameId);
       setCost1(Number(splited[0]));
       setCost2(Number(splited[1]));
-      setEqual(Number(splited[2]));
+      setCost3(Number(splited[2]));
     } else {
       reset(initData);
       setGameId(0);
       setCost1(0);
       setCost2(0);
-      setEqual(0);
+      setCost3(0);
     }
   }, [data, reset]);
 
   useEffect(() => {
-    fetchProducts(gameId);
+    fetchProductsByGameId(gameId);
   }, [gameId]);
 
   return (
@@ -287,7 +329,7 @@ const OrderForm = (props: Props) => {
                   onChange={(_, g) => {
                     if (g?.id) {
                       setGameId(g?.id);
-                      fetchProducts(g.id);
+                      fetchProductsByGameId(g.id);
                     } else {
                       setGameId(0);
                       setProducts([]);
@@ -317,18 +359,13 @@ const OrderForm = (props: Props) => {
                   }) => (
                     <Autocomplete
                       id="productId"
-                      options={products}
-                      value={products.find((g) => g.id === value) || null}
-                      onChange={(_, v) => onChange(v?.id ? v.id : 0)}
-                      isOptionEqualToValue={(option, value) =>
-                        option.id === value.id
+                      options={products.map((p) => p.name)}
+                      value={products.find((p) => p.id === value)?.name || ""}
+                      freeSolo
+                      onChange={(_, v) =>
+                        onChange(products.find((p) => p.name === v)?.id || 0)
                       }
-                      getOptionLabel={(o) => o.name}
-                      renderOption={(props, option) => (
-                        <li key={`productOption_${option.id}`} {...props}>
-                          {option.name}
-                        </li>
-                      )}
+                      onInputChange={(_, v) => setProductName(v)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -342,6 +379,11 @@ const OrderForm = (props: Props) => {
                     />
                   )}
                 />
+              </Grid>
+              <Grid item lg={2}>
+                <Button variant="contained" onClick={onSubmitProduct}>
+                  新增
+                </Button>
               </Grid>
               <Grid item lg={5}>
                 <Controller
@@ -452,13 +494,13 @@ const OrderForm = (props: Props) => {
                     onChange={(e) => setCost2(Number(e.target.value))}
                     disabled={type === "watch"}
                   />
-                  <Typography variant="h5">=</Typography>
+                  <Typography variant="h5">*</Typography>
                   <TextField
                     id="cost3"
                     fullWidth
                     type="number"
-                    value={equal || ""}
-                    onChange={(e) => setEqual(Number(e.target.value))}
+                    value={cost3 || ""}
+                    onChange={(e) => setCost3(Number(e.target.value))}
                     disabled={type === "watch"}
                   />
                 </Stack>
