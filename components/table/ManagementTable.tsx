@@ -10,6 +10,7 @@ import {
   Stack,
   Box,
   Tooltip,
+  TablePagination,
 } from "@mui/material";
 import { Add, Delete, Edit, Visibility } from "@mui/icons-material";
 
@@ -39,6 +40,8 @@ const ManagementTable = <T extends DataKey>(props: Props<T>) => {
   const [selected, setSelected] = useState<FormData<T>>(null);
   const [formType, setFormType] = useState<FormType>("create");
   const [formModal, setFormModal] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const onClose = () => {
     setFormModal(false);
@@ -96,42 +99,56 @@ const ManagementTable = <T extends DataKey>(props: Props<T>) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {datas?.map((d, i) => (
-              <TableRow key={`${title}_${i}`}>
-                {metadata.map((m, index) => (
-                  <TableCell key={m.key}>
-                    {m.key === "sn" ? (
-                      i + 1
-                    ) : (
-                      <>{m.preDisplay ? m.preDisplay(d) : d[m.key]}</>
-                    )}
+            {datas
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((d, i) => (
+                <TableRow key={`${title}_${i}`}>
+                  {metadata.map((m, index) => (
+                    <TableCell key={m.key}>
+                      {m.key === "sn" ? (
+                        i + 1
+                      ) : (
+                        <>{m.preDisplay ? m.preDisplay(d) : d[m.key]}</>
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <Stack direction="row">
+                      <Tooltip title="查看" onClick={() => onWatch(d)}>
+                        <IconButton>
+                          <Visibility />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="編輯">
+                        <IconButton onClick={() => onEdit(d)}>
+                          <Edit />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="刪除">
+                        <IconButton onClick={() => onDelete(d)}>
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    </Stack>
                   </TableCell>
-                ))}
-                <TableCell>
-                  <Stack direction="row">
-                    <Tooltip title="查看" onClick={() => onWatch(d)}>
-                      <IconButton>
-                        <Visibility />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="編輯">
-                      <IconButton onClick={() => onEdit(d)}>
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="刪除">
-                      <IconButton onClick={() => onDelete(d)}>
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            ))}
+                </TableRow>
+              ))}
             {extraRow && datas && extraRow(datas)}
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10]}
+        rowsPerPage={rowsPerPage}
+        component="div"
+        count={datas.length}
+        page={page}
+        onPageChange={(_, newPage) => setPage(newPage)}
+        onRowsPerPageChange={(e) => {
+          setRowsPerPage(parseInt(e.target.value, 10));
+          setPage(0);
+        }}
+      />
       <Form
         open={formModal}
         type={formType}
