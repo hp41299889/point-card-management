@@ -70,7 +70,7 @@ const OrderForm = (props: Props) => {
   const payments = fields?.payments as Payment[];
   const customers = fields?.customers as Customer[];
   const machines = fields?.machines as Machine[];
-  const games = fields?.payments as Game[];
+  const games = fields?.games as Game[];
   const [products, setProducts] = useState<Product[]>([]);
   const [cost1, setCost1] = useState<number>(0);
   const [cost2, setCost2] = useState<number>(0);
