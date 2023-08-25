@@ -141,6 +141,7 @@ const Page = () => {
           metadata={metadata}
           datas={data}
           afterAction={fetcher}
+          fields={{ games, payments, customers, machines }}
           Form={OrderForm}
           extraRow={extraRow}
         />
