@@ -10,10 +10,6 @@ export interface PostGame extends PatchGame {
 }
 
 export interface PatchGame {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
   name?: string;
-  description?: string;
   note?: string;
 }

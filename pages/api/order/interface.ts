@@ -22,7 +22,6 @@ export interface PatchOrder {
   cost?: string;
   price?: number;
   status?: string;
-  description?: string;
   note?: string;
   userId?: number;
   paymentId?: number;

@@ -11,9 +11,9 @@ const metadata: TableMetadata[] = [
   {
     key: "sn",
     label: "序號",
+    width: "40px",
   },
-  { key: "name", label: "名稱" },
-  { key: "description", label: "描述" },
+  { key: "name", label: "名稱", width: "100px" },
   { key: "note", label: "備註" },
   {
     key: "createdAt",
@@ -21,12 +21,12 @@ const metadata: TableMetadata[] = [
     preDisplay: (u) => toLocaleDateTime(u.createdAt),
     width: "150px",
   },
-  {
-    key: "updatedAt",
-    label: "更新時間",
-    preDisplay: (u) => toLocaleDateTime(u.updatedAt),
-    width: "150px",
-  },
+  // {
+  //   key: "updatedAt",
+  //   label: "更新時間",
+  //   preDisplay: (u) => toLocaleDateTime(u.updatedAt),
+  //   width: "150px",
+  // },
 ];
 
 const Page = () => {

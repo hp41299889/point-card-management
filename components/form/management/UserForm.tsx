@@ -32,7 +32,6 @@ const initData: FormData = {
   username: "",
   password: "",
   admin: false,
-  description: "",
   note: "",
   confirm: false,
 };
@@ -190,15 +189,6 @@ const UserForm = (props: Props) => {
                   disabled={type === "watch"}
                   error={Boolean(errors.password)}
                   helperText={errors.password && "請輸入密碼"}
-                />
-              </Grid>
-              <Grid item lg={12}>
-                <TextField
-                  id="description"
-                  label="描述"
-                  fullWidth
-                  {...register("description")}
-                  disabled={type === "watch"}
                 />
               </Grid>
               <Grid item lg={12}>
