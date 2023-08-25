@@ -17,7 +17,6 @@ import { prisma } from "./prisma";
         username,
         password: await hash(password, 10),
         admin: true,
-        description: "admin",
         note: "admin",
       },
     });
