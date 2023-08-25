@@ -37,7 +37,7 @@ const handler = async (
       }
       case "PATCH": {
         const { body }: { body: PatchCustomer } = req;
-        const { id, createdAt, updatedAt, ...payload } = body;
+        const { ...payload } = body;
         try {
           const updatedCustomer = await prisma.customer.update({
             where: { id },

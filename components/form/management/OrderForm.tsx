@@ -18,6 +18,8 @@ import {
   FormControl,
   InputLabel,
   Button,
+  FormControlLabel,
+  FormLabel,
 } from "@mui/material";
 
 import { FormProps } from "./interface";
@@ -54,7 +56,6 @@ const initData: FormData = {
   cost: "",
   price: 0,
   status: "正常",
-  description: "",
   note: "",
   userId: 0,
   paymentId: 0,
@@ -132,7 +133,6 @@ const OrderForm = (props: Props) => {
             cost: payload.cost,
             price: payload.price,
             status: payload.status,
-            description: payload.description,
             note: payload.note,
             userId: payload.userId,
             paymentId: payload.paymentId,
@@ -370,7 +370,7 @@ const OrderForm = (props: Props) => {
                   )}
                 />
               </Grid>
-              <Grid item lg={2}>
+              <Grid item lg={2} display="flex" alignItems="center">
                 <Button variant="contained" onClick={onSubmitProduct}>
                   新增
                 </Button>
@@ -465,37 +465,44 @@ const OrderForm = (props: Props) => {
                 />
               </Grid>
               <Grid item lg={7} />
-              <Grid item lg={10}>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <TextField
-                    id="cost1"
-                    fullWidth
-                    type="number"
-                    value={cost1 || ""}
-                    onChange={(e) => setCost1(Number(e.target.value))}
-                    disabled={type === "watch"}
-                  />
-                  <Typography variant="h5">x</Typography>
-                  <TextField
-                    id="cost2"
-                    fullWidth
-                    type="number"
-                    value={cost2 || ""}
-                    onChange={(e) => setCost2(Number(e.target.value))}
-                    disabled={type === "watch"}
-                  />
-                  <Typography variant="h5">*</Typography>
-                  <TextField
-                    id="cost3"
-                    fullWidth
-                    type="number"
-                    value={cost3 || ""}
-                    onChange={(e) => setCost3(Number(e.target.value))}
-                    disabled={type === "watch"}
-                  />
-                </Stack>
+              <Grid item lg={5}>
+                <TextField
+                  id="cost1"
+                  label="成本"
+                  fullWidth
+                  type="number"
+                  value={cost1 || ""}
+                  onChange={(e) => setCost1(Number(e.target.value))}
+                  disabled={type === "watch"}
+                />
               </Grid>
-              <Grid item lg={2} />
+              <Grid item lg={7} />
+              <Grid item lg={1.5} display="flex" alignItems="center">
+                <FormLabel>卡價</FormLabel>
+              </Grid>
+              <Grid item lg={5}>
+                <TextField
+                  id="cost2"
+                  fullWidth
+                  type="number"
+                  value={cost2 || ""}
+                  onChange={(e) => setCost2(Number(e.target.value))}
+                  disabled={type === "watch"}
+                />
+              </Grid>
+              <Grid item lg={0.5} display="flex" alignItems="center">
+                <Typography variant="h5">x</Typography>
+              </Grid>
+              <Grid item lg={5}>
+                <TextField
+                  id="cost3"
+                  fullWidth
+                  type="number"
+                  value={cost3 || ""}
+                  onChange={(e) => setCost3(Number(e.target.value))}
+                  disabled={type === "watch"}
+                />
+              </Grid>
               <Grid item lg={5}>
                 <TextField
                   id="price"
@@ -507,15 +514,6 @@ const OrderForm = (props: Props) => {
                   disabled={type === "watch"}
                   error={Boolean(errors.price)}
                   helperText={errors.price && "請輸入售價"}
-                />
-              </Grid>
-              <Grid item lg={12}>
-                <TextField
-                  id="description"
-                  label="描述"
-                  fullWidth
-                  {...register("description")}
-                  disabled={type === "watch"}
                 />
               </Grid>
               <Grid item lg={12}>

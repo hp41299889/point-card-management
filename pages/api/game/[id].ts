@@ -37,7 +37,7 @@ const handler = async (
       }
       case "PATCH": {
         const { body }: { body: PatchGame } = req;
-        const { id, createdAt, updatedAt, ...payload } = body;
+        const { ...payload } = body;
         try {
           const updatedGame = await prisma.game.update({
             where: { id },

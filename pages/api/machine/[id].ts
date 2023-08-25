@@ -38,7 +38,7 @@ const handler = async (
       }
       case "PATCH": {
         const { body }: { body: PatchMachine } = req;
-        const { id, createdAt, updatedAt, ...payload } = body;
+        const { ...payload } = body;
         try {
           const updatedMachine = await prisma.machine.update({
             where: { id },

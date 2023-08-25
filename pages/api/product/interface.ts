@@ -14,11 +14,7 @@ export interface PostProduct extends PatchProduct {
 }
 
 export interface PatchProduct {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
   name?: string;
-  description?: string;
   note?: string;
   gameId?: number;
   game?: Game;

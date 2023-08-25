@@ -34,7 +34,6 @@ interface Props extends FormProps<PatchPayment> {
 
 const initData: FormData = {
   name: "",
-  description: "",
   note: "",
   confirm: false,
 };
@@ -171,15 +170,6 @@ const PaymentForm = (props: Props) => {
                 />
               </Grid>
               <Grid item lg={7} />
-              <Grid item lg={12}>
-                <TextField
-                  id="description"
-                  label="描述"
-                  fullWidth
-                  {...register("description")}
-                  disabled={type === "watch"}
-                />
-              </Grid>
               <Grid item lg={12}>
                 <TextField
                   id="note"
