@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
@@ -7,9 +6,6 @@ import { useGames, useProducts } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import ProductForm from "@/components/form/management/ProductForm";
 import { Product } from "../api/product/interface";
-import { FormType } from "@/components/form/management/interface";
-
-type Data = Product | null;
 
 const metadata: TableMetadata[] = [
   {
@@ -37,38 +33,7 @@ const metadata: TableMetadata[] = [
 const Page = () => {
   const { data, fetcher, loading } = useProducts();
   const { data: games } = useGames();
-  const [selected, setSelected] = useState<Data>(null);
-  const [formType, setFormType] = useState<FormType>("create");
-  const [formModal, setFormModal] = useState<boolean>(false);
 
-  const onClose = () => {
-    setFormModal(false);
-    setSelected(null);
-  };
-
-  const onClickNewData = () => {
-    setFormType("create");
-    setSelected(null);
-    setFormModal(true);
-  };
-
-  const onClickWatchData = (data: Data) => {
-    setFormType("watch");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickEditData = (data: Data) => {
-    setFormType("edit");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickDeleteData = (data: Data) => {
-    setFormType("delete");
-    setSelected(data);
-    setFormModal(true);
-  };
   return (
     <Box>
       <Typography variant="h6">項目管理</Typography>
@@ -80,22 +45,11 @@ const Page = () => {
           title="product"
           metadata={metadata}
           datas={data}
-          onClickData={{
-            onNew: onClickNewData,
-            onWatch: onClickWatchData,
-            onEdit: onClickEditData,
-            onDelete: onClickDeleteData,
-          }}
+          afterAction={fetcher}
+          fields={{ games: games }}
+          Form={ProductForm}
         />
       )}
-      <ProductForm
-        open={formModal}
-        type={formType}
-        data={selected}
-        fields={{ games }}
-        onClose={onClose}
-        afterAction={fetcher}
-      />
     </Box>
   );
 };

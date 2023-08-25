@@ -13,7 +13,7 @@
     "prisma:seed": "yarn prisma db seed",
     "prisma:seed:local": "dotenv -e .env.local -- yarn prisma db seed",
     "prisma:push:local": "yarn prisma format && yarn prisma generate && dotenv -e .env.local -- yarn prisma db push",
-    "p": "dotenv -e .env.local -- yarn prisma migrate dev --name order-customer-nullable"
+    "p": "dotenv -e .env.local -- yarn prisma migrate dev --name nullable"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

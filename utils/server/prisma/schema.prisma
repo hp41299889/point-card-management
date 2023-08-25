@@ -70,8 +70,8 @@ model Product {
   name        String
   description String?
   note        String?
-  gameId      Int
-  game        Game     @relation(fields: [gameId], references: [id])
+  gameId      Int?
+  game        Game?     @relation(fields: [gameId], references: [id])
   orders      Order[]
 }
 
@@ -85,14 +85,14 @@ model Order {
   status      String
   description String?
   note        String?
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-  paymentId   Int
-  payment     Payment   @relation(fields: [paymentId], references: [id])
-  machineId   Int
-  machine     Machine   @relation(fields: [machineId], references: [id])
-  productId   Int
-  product     Product   @relation(fields: [productId], references: [id])
+  userId      Int?
+  user        User?      @relation(fields: [userId], references: [id])
+  paymentId   Int?
+  payment     Payment?   @relation(fields: [paymentId], references: [id])
+  machineId   Int?
+  machine     Machine?   @relation(fields: [machineId], references: [id])
+  productId   Int?
+  product     Product?   @relation(fields: [productId], references: [id])
   customerId  Int?
   customer    Customer? @relation(fields: [customerId], references: [id])
 }

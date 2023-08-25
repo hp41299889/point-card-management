@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import {
   Box,
   Divider,
@@ -7,6 +7,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import _ from "lodash";
 
 import OrderForm from "@/components/form/management/OrderForm";
 import ManagementTable from "@/components/table/ManagementTable";
@@ -21,11 +22,7 @@ import {
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import { Order } from "../api/order/interface";
-import { FormType } from "@/components/form/management/interface";
 import OrderSeachForm from "@/components/form/management/OrderSearchForm";
-import _ from "lodash";
-
-type Data = Order | null;
 
 const costPreProcess = (cost: string) => {
   const splited = cost.split(",");
@@ -91,40 +88,6 @@ const Page = () => {
   const { data: machines } = useMachines();
   const { data: games } = useGames();
 
-  //TODO
-  const [selected, setSelected] = useState<Data>(null);
-  const [formType, setFormType] = useState<FormType>("create");
-  const [formModal, setFormModal] = useState<boolean>(false);
-
-  const onClose = () => {
-    setFormModal(false);
-    setSelected(null);
-  };
-
-  const onClickNewData = () => {
-    setFormType("create");
-    setSelected(null);
-    setFormModal(true);
-  };
-
-  const onClickWatchData = (data: Data) => {
-    setFormType("watch");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickEditData = (data: Data) => {
-    setFormType("edit");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickDeleteData = (data: Data) => {
-    setFormType("delete");
-    setSelected(data);
-    setFormModal(true);
-  };
-
   const extraRow = (data: Order[]) => (
     <TableRow>
       {metadata.map((m, i) => (
@@ -177,28 +140,11 @@ const Page = () => {
           title="order"
           metadata={metadata}
           datas={data}
-          onClickData={{
-            onNew: onClickNewData,
-            onWatch: onClickWatchData,
-            onEdit: onClickEditData,
-            onDelete: onClickDeleteData,
-          }}
+          afterAction={fetcher}
+          Form={OrderForm}
           extraRow={extraRow}
         />
       )}
-      <OrderForm
-        open={formModal}
-        type={formType}
-        data={selected}
-        fields={{
-          payments,
-          customers,
-          machines,
-          games,
-        }}
-        onClose={onClose}
-        afterAction={fetcher}
-      />
     </Box>
   );
 };

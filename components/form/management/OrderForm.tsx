@@ -32,11 +32,7 @@ import {
 import { useDispatch } from "@/utils/client/redux/store";
 import { setAppFeedbackSnackbar } from "@/utils/client/redux/app";
 import { PostProduct, Product } from "@/pages/api/product/interface";
-import {
-  getProducts,
-  getProductsByGameId,
-  postProduct,
-} from "@/utils/client/api/product";
+import { getProductsByGameId, postProduct } from "@/utils/client/api/product";
 import { Payment } from "@/pages/api/payment/interface";
 import { Customer } from "@/pages/api/customer/interface";
 import { Machine } from "@/pages/api/machine/interface";
@@ -46,13 +42,10 @@ interface FormData extends PostOrder {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<Order> {
   data: Order | null;
-  fields: {
-    payments: Payment[];
-    customers: Customer[];
-    machines: Machine[];
-    games: Game[];
+  fields?: {
+    [key: string]: any[];
   };
 }
 
@@ -73,7 +66,10 @@ const initData: FormData = {
 
 const OrderForm = (props: Props) => {
   const { open, type, data, fields, onClose, afterAction } = props;
-  const { payments, customers, machines, games } = fields;
+  const payments = fields?.payments as Payment[];
+  const customers = fields?.customers as Customer[];
+  const machines = fields?.machines as Machine[];
+  const games = fields?.payments as Game[];
   const [products, setProducts] = useState<Product[]>([]);
   const [cost1, setCost1] = useState<number>(0);
   const [cost2, setCost2] = useState<number>(0);
