@@ -35,7 +35,7 @@ const cardPricePreProcess = (cost: string) => {
 };
 
 const metadata: TableMetadata[] = [
-  { key: "sn", label: "序號" },
+  { key: "sn", label: "序號", width: "40px" },
   {
     key: "payment.name",
     label: "支付方式",
