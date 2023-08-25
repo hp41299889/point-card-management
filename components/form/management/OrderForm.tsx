@@ -132,6 +132,7 @@ const OrderForm = (props: Props) => {
           setValue("confirm", true);
           // TODO use find
           const patch: PatchOrder = {
+            amount: payload.amount,
             cost: payload.cost,
             price: payload.price,
             status: payload.status,
@@ -143,7 +144,6 @@ const OrderForm = (props: Props) => {
             machineId: payload.machineId,
             customerId: payload.customerId,
           };
-          console.log(patch);
           const res = await patchOrderByUid(data?.uid!, patch);
           if (res.data.status === "success") {
             onClose();
@@ -204,13 +204,6 @@ const OrderForm = (props: Props) => {
     }
   };
 
-  const fetchProducts = async () => {
-    const res = await getProducts();
-    if (res.data.status === "success") {
-      setProducts(res.data.data);
-    }
-  };
-
   const onSubmitProduct = async () => {
     const payload: PostProduct = {
       name: productName,
@@ -227,7 +220,7 @@ const OrderForm = (props: Props) => {
           })
         );
         setValue("productId", res.data.data.id);
-        fetchProducts();
+        fetchProductsByGameId(gameId);
       }
     } catch (err) {
       console.error(err);

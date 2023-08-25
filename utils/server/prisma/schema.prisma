@@ -27,7 +27,7 @@ model Machine {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  name        String
+  name        String   @unique
   description String?
   note        String?
   orders      Order[]
@@ -37,7 +37,7 @@ model Game {
   id          Int       @id @default(autoincrement())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  name        String
+  name        String    @unique
   description String?
   note        String?
   products    Product[]
@@ -47,7 +47,7 @@ model Customer {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  name        String
+  name        String   @unique
   description String?
   note        String?
   orders      Order[]
@@ -57,7 +57,7 @@ model Payment {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  name        String
+  name        String   @unique
   description String?
   note        String?
   orders      Order[]
@@ -76,9 +76,9 @@ model Product {
 }
 
 model Order {
-  uid         String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  uid         String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   amount      Int
   cost        String
   price       Int
@@ -86,13 +86,13 @@ model Order {
   description String?
   note        String?
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
   paymentId   Int
-  payment     Payment  @relation(fields: [paymentId], references: [id])
+  payment     Payment   @relation(fields: [paymentId], references: [id])
   machineId   Int
-  machine     Machine  @relation(fields: [machineId], references: [id])
+  machine     Machine   @relation(fields: [machineId], references: [id])
   productId   Int
-  product     Product  @relation(fields: [productId], references: [id])
-  customerId  Int
-  customer    Customer @relation(fields: [customerId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
+  customerId  Int?
+  customer    Customer? @relation(fields: [customerId], references: [id])
 }

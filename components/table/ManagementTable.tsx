@@ -78,11 +78,7 @@ const ManagementTable = <T extends TableData>(props: Props<T>) => {
                     {m.key === "sn" ? (
                       i + 1
                     ) : (
-                      <>
-                        {m.preDisplay
-                          ? m.preDisplay(d)
-                          : getValueByPath(d, m.key)}
-                      </>
+                      <>{m.preDisplay ? m.preDisplay(d) : d[m.key]}</>
                     )}
                   </TableCell>
                 ))}
