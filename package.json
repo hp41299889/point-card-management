@@ -12,7 +12,8 @@
     "db": "yarn prisma migrate deploy && yarn prisma generate && yarn prisma:seed",
     "prisma:seed": "yarn prisma db seed",
     "prisma:seed:local": "dotenv -e .env.local -- yarn prisma db seed",
-    "prisma:push:local": "yarn prisma format && yarn prisma generate && dotenv -e .env.local -- yarn prisma db push"
+    "prisma:push:local": "yarn prisma format && yarn prisma generate && dotenv -e .env.local -- yarn prisma db push",
+    "p": "dotenv -e .env.local -- yarn prisma migrate dev --name nullable"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -24,6 +25,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash": "^4.14.197",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -36,6 +38,7 @@
     "eslint-config-next": "13.4.16",
     "jose": "^4.14.4",
     "jsonwebtoken": "^9.0.1",
+    "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
     "next": "13.4.16",
     "pg": "^8.11.2",

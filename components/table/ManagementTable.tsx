@@ -13,35 +13,60 @@ import {
 } from "@mui/material";
 import { Add, Delete, Edit, Visibility } from "@mui/icons-material";
 
-import { TableMetadata, TableData } from "./interface";
+import { TableDatas, TableMetadata } from "./interface";
+import { useState, ComponentType } from "react";
+import { FormProps, FormType } from "../form/management/interface";
+import { FormData } from "../form/interface";
+
+interface DataKey {
+  [key: string]: any;
+}
 
 interface Props<T> {
   title: string;
   metadata: TableMetadata[];
-  datas: Array<T> | null;
-  onClickData: {
-    onNew: () => void;
-    onWatch: (d: T | null) => void;
-    onEdit: (d: T | null) => void;
-    onDelete: (d: T | null) => void;
+  datas: TableDatas<T>;
+  Form: ComponentType<FormProps<T>>;
+  afterAction: () => Promise<void>;
+  fields?: {
+    [key: string]: any[];
   };
   extraRow?: (data: Array<any>) => JSX.Element;
 }
 
-const ManagementTable = <T extends TableData>(props: Props<T>) => {
-  const { title, metadata, datas, onClickData, extraRow } = props;
-  const { onNew, onWatch, onEdit, onDelete } = onClickData;
+const ManagementTable = <T extends DataKey>(props: Props<T>) => {
+  const { title, metadata, datas, fields, afterAction, Form, extraRow } = props;
+  const [selected, setSelected] = useState<FormData<T>>(null);
+  const [formType, setFormType] = useState<FormType>("create");
+  const [formModal, setFormModal] = useState<boolean>(false);
 
-  const getValueByPath = (object: any, path: any) => {
-    const keys = path.split(".");
-    let current = object;
+  const onClose = () => {
+    setFormModal(false);
+    setSelected(null);
+  };
 
-    for (let key of keys) {
-      if (current[key] === undefined) return undefined;
-      current = current[key];
-    }
+  const onNew = () => {
+    setFormType("create");
+    setSelected(null);
+    setFormModal(true);
+  };
 
-    return current;
+  const onWatch = (d: FormData<T>) => {
+    setFormType("watch");
+    setSelected(d);
+    setFormModal(true);
+  };
+
+  const onEdit = (d: FormData<T>) => {
+    setFormType("edit");
+    setSelected(d);
+    setFormModal(true);
+  };
+
+  const onDelete = (d: FormData<T>) => {
+    setFormType("delete");
+    setSelected(d);
+    setFormModal(true);
   };
 
   return (
@@ -78,11 +103,7 @@ const ManagementTable = <T extends TableData>(props: Props<T>) => {
                     {m.key === "sn" ? (
                       i + 1
                     ) : (
-                      <>
-                        {m.preDisplay
-                          ? m.preDisplay(d)
-                          : getValueByPath(d, m.key)}
-                      </>
+                      <>{m.preDisplay ? m.preDisplay(d) : d[m.key]}</>
                     )}
                   </TableCell>
                 ))}
@@ -111,6 +132,14 @@ const ManagementTable = <T extends TableData>(props: Props<T>) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Form
+        open={formModal}
+        type={formType}
+        data={selected}
+        onClose={onClose}
+        fields={fields}
+        afterAction={afterAction}
+      />
     </Box>
   );
 };

@@ -66,8 +66,6 @@ const handler = async (
       case "POST": {
         const { body }: { body: PostOrder } = req;
         const { ...payload } = body;
-        console.log(payload);
-
         try {
           const createdOrder = await prisma.order.create({
             data: { ...payload },

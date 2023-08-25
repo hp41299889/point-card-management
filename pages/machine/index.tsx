@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
@@ -7,9 +6,6 @@ import { useMachines } from "@/components/table/hook";
 import MachineForm from "@/components/form/management/MachineForm";
 import { toLocaleDateTime } from "@/utils/time";
 import { Machine } from "../api/machine/interface";
-import { FormType } from "@/components/form/management/interface";
-
-type Data = Machine | null;
 
 const metadata: TableMetadata[] = [
   {
@@ -35,38 +31,6 @@ const metadata: TableMetadata[] = [
 
 const Page = () => {
   const { data, fetcher, loading } = useMachines();
-  const [selected, setSelected] = useState<Data>(null);
-  const [formType, setFormType] = useState<FormType>("create");
-  const [formModal, setFormModal] = useState<boolean>(false);
-
-  const onClose = () => {
-    setFormModal(false);
-    setSelected(null);
-  };
-
-  const onClickNewData = () => {
-    setFormType("create");
-    setSelected(null);
-    setFormModal(true);
-  };
-
-  const onClickWatchData = (data: Data) => {
-    setFormType("watch");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickEditData = (data: Data) => {
-    setFormType("edit");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickDeleteData = (data: Data) => {
-    setFormType("delete");
-    setSelected(data);
-    setFormModal(true);
-  };
 
   return (
     <Box>
@@ -79,21 +43,10 @@ const Page = () => {
           title="machine"
           metadata={metadata}
           datas={data}
-          onClickData={{
-            onNew: onClickNewData,
-            onWatch: onClickWatchData,
-            onEdit: onClickEditData,
-            onDelete: onClickDeleteData,
-          }}
+          afterAction={fetcher}
+          Form={MachineForm}
         />
       )}
-      <MachineForm
-        open={formModal}
-        type={formType}
-        data={selected}
-        onClose={onClose}
-        afterAction={fetcher}
-      />
     </Box>
   );
 };
