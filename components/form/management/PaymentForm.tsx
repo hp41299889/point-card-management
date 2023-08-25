@@ -28,7 +28,7 @@ interface FormData extends PostPayment {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<PatchPayment> {
   data: Payment | null;
 }
 

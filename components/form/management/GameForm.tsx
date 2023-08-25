@@ -28,7 +28,7 @@ interface FormData extends PostGame {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<Game> {
   data: Game | null;
 }
 

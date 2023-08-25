@@ -23,7 +23,7 @@ interface FormData extends PostUser {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<User> {
   data: User | null;
 }
 

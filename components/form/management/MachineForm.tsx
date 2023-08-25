@@ -28,7 +28,7 @@ interface FormData extends PostMachine {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<Machine> {
   data: Machine | null;
 }
 

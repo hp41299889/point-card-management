@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import { FormProps } from "./interface";
-import { PostProduct, PatchProduct } from "@/pages/api/product/interface";
+import { PostProduct } from "@/pages/api/product/interface";
 import { Product } from "@/pages/api/product/interface";
 import ModalAction from "@/components/modal/ModalAction";
 import {
@@ -30,10 +30,10 @@ interface FormData extends PostProduct {
   confirm: boolean;
 }
 
-interface Props extends FormProps {
+interface Props extends FormProps<Product> {
   data: Product | null;
-  fields: {
-    games: Game[];
+  fields?: {
+    [key: string]: any[];
   };
 }
 
@@ -47,7 +47,7 @@ const initData: FormData = {
 
 const ProductForm = (props: Props) => {
   const { open, type, data, fields, onClose, afterAction } = props;
-  const { games } = fields;
+  const games = fields?.games as Game[];
   const dispatch = useDispatch();
   const {
     control,

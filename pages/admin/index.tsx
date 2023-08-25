@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, CircularProgress, Divider, Typography } from "@mui/material";
 
 import { TableMetadata } from "@/components/table/interface";
@@ -7,9 +6,6 @@ import ManagementTable from "@/components/table/ManagementTable";
 import UserForm from "@/components/form/management/UserForm";
 import { useUsers } from "@/components/table/hook";
 import { User } from "../api/user/interface";
-import { FormType } from "@/components/form/management/interface";
-
-type Data = User | null;
 
 const metadata: TableMetadata[] = [
   {
@@ -35,38 +31,6 @@ const metadata: TableMetadata[] = [
 
 const Page = () => {
   const { data, fetcher, loading } = useUsers();
-  const [selected, setSelected] = useState<Data>(null);
-  const [formType, setFormType] = useState<FormType>("create");
-  const [formModal, setFormModal] = useState<boolean>(false);
-
-  const onClose = () => {
-    setFormModal(false);
-    setSelected(null);
-  };
-
-  const onClickNewData = () => {
-    setFormType("create");
-    setSelected(null);
-    setFormModal(true);
-  };
-
-  const onClickWatchData = (data: Data) => {
-    setFormType("watch");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickEditData = (data: Data) => {
-    setFormType("edit");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickDeleteData = (data: Data) => {
-    setFormType("delete");
-    setSelected(data);
-    setFormModal(true);
-  };
 
   return (
     <Box>
@@ -79,21 +43,10 @@ const Page = () => {
           title="admin"
           metadata={metadata}
           datas={data}
-          onClickData={{
-            onNew: onClickNewData,
-            onWatch: onClickWatchData,
-            onEdit: onClickEditData,
-            onDelete: onClickDeleteData,
-          }}
+          afterAction={fetcher}
+          Form={UserForm}
         />
       )}
-      <UserForm
-        open={formModal}
-        type={formType}
-        data={selected}
-        onClose={onClose}
-        afterAction={fetcher}
-      />
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import {
   Box,
   Divider,
@@ -7,6 +7,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import _ from "lodash";
 
 import OrderForm from "@/components/form/management/OrderForm";
 import ManagementTable from "@/components/table/ManagementTable";
@@ -21,10 +22,7 @@ import {
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import { Order } from "../api/order/interface";
-import { FormType } from "@/components/form/management/interface";
 import OrderSeachForm from "@/components/form/management/OrderSearchForm";
-
-type Data = Order | null;
 
 const costPreProcess = (cost: string) => {
   const splited = cost.split(",");
@@ -33,11 +31,31 @@ const costPreProcess = (cost: string) => {
 
 const metadata: TableMetadata[] = [
   { key: "sn", label: "序號" },
-  { key: "payment.name", label: "支付方式" },
-  { key: "product.game.name", label: "遊戲" },
-  { key: "product.name", label: "項目" },
-  { key: "customer.name", label: "客源" },
-  { key: "machine.name", label: "機台" },
+  {
+    key: "payment.name",
+    label: "支付方式",
+    preDisplay: (d) => _.get(d, "payment.name"),
+  },
+  {
+    key: "product.game.name",
+    label: "遊戲",
+    preDisplay: (d) => _.get(d, "product.game.name"),
+  },
+  {
+    key: "product.name",
+    label: "項目",
+    preDisplay: (d) => _.get(d, "product.name"),
+  },
+  {
+    key: "customer.name",
+    label: "客源",
+    preDisplay: (d) => _.get(d, "customer.name"),
+  },
+  {
+    key: "machine.name",
+    label: "機台",
+    preDisplay: (d) => _.get(d, "machine.name"),
+  },
   { key: "cost", label: "成本", preDisplay: (d) => costPreProcess(d.cost) },
   { key: "price", label: "售價" },
   { key: "amount", label: "數量" },
@@ -70,40 +88,6 @@ const Page = () => {
   const { data: machines } = useMachines();
   const { data: games } = useGames();
 
-  //TODO
-  const [selected, setSelected] = useState<Data>(null);
-  const [formType, setFormType] = useState<FormType>("create");
-  const [formModal, setFormModal] = useState<boolean>(false);
-
-  const onClose = () => {
-    setFormModal(false);
-    setSelected(null);
-  };
-
-  const onClickNewData = () => {
-    setFormType("create");
-    setSelected(null);
-    setFormModal(true);
-  };
-
-  const onClickWatchData = (data: Data) => {
-    setFormType("watch");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickEditData = (data: Data) => {
-    setFormType("edit");
-    setSelected(data);
-    setFormModal(true);
-  };
-
-  const onClickDeleteData = (data: Data) => {
-    setFormType("delete");
-    setSelected(data);
-    setFormModal(true);
-  };
-
   const extraRow = (data: Order[]) => (
     <TableRow>
       {metadata.map((m, i) => (
@@ -114,18 +98,23 @@ const Page = () => {
           {m.key === "machine.name" && <TableCell>總計</TableCell>}
           {m.key === "cost" && (
             <TableCell>
-              {data.reduce((pre, cur) => {
-                const cost = cur.cost.split(",");
-                const multy =
-                  Number(cost[0]) * Number(cost[1]) * Number(cost[2]);
-                return pre + Number(multy);
-              }, 0)}
+              {data
+                .reduce((pre, cur) => {
+                  const cost = cur.cost.split(",");
+                  const multy =
+                    Number(cost[0]) *
+                    Number(cost[1]) *
+                    Number(cost[2]) *
+                    cur.amount;
+                  return pre + Number(multy);
+                }, 0)
+                .toFixed(2)}
             </TableCell>
           )}
           {m.key === "price" && (
             <TableCell>
               {data.reduce((pre, cur) => {
-                return pre + cur.price;
+                return pre + cur.price * cur.amount;
               }, 0)}
             </TableCell>
           )}
@@ -151,28 +140,11 @@ const Page = () => {
           title="order"
           metadata={metadata}
           datas={data}
-          onClickData={{
-            onNew: onClickNewData,
-            onWatch: onClickWatchData,
-            onEdit: onClickEditData,
-            onDelete: onClickDeleteData,
-          }}
+          afterAction={fetcher}
+          Form={OrderForm}
           extraRow={extraRow}
         />
       )}
-      <OrderForm
-        open={formModal}
-        type={formType}
-        data={selected}
-        fields={{
-          payments,
-          customers,
-          machines,
-          games,
-        }}
-        onClose={onClose}
-        afterAction={fetcher}
-      />
     </Box>
   );
 };
