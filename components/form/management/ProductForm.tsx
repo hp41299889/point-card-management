@@ -39,7 +39,6 @@ interface Props extends FormProps<Product> {
 
 const initData: FormData = {
   name: "",
-  description: "",
   note: "",
   gameId: 0,
   confirm: false,
@@ -212,15 +211,6 @@ const ProductForm = (props: Props) => {
                       disabled={type === "watch"}
                     />
                   )}
-                />
-              </Grid>
-              <Grid item lg={12}>
-                <TextField
-                  id="description"
-                  label="描述"
-                  fullWidth
-                  {...register("description")}
-                  disabled={type === "watch"}
                 />
               </Grid>
               <Grid item lg={12}>

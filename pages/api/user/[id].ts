@@ -41,7 +41,7 @@ const handler = async (
         if (body.password) {
           body.password = await hash(body.password, 10);
         }
-        const { id, createdAt, updatedAt, ...payload } = body;
+        const { ...payload } = body;
         try {
           const updatedUser = await prisma.user.update({
             where: { id },

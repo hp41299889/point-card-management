@@ -10,18 +10,13 @@ export interface PostUser extends PatchUser {
   username: string;
   password: string;
   admin: boolean;
-  description?: string;
   note?: string;
 }
 
 export interface PatchUser {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
   name?: string;
   username?: string;
   password?: string;
   admin?: boolean;
-  description?: string;
   note?: string;
 }

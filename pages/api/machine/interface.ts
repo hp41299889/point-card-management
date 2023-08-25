@@ -10,10 +10,6 @@ export interface PostMachine extends PatchMachine {
 }
 
 export interface PatchMachine {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
   name?: string;
-  description?: string;
   note?: string;
 }
