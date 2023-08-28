@@ -40,6 +40,8 @@ const Page = () => {
   const { data, fetcher, loading } = useProducts();
   const { data: games } = useGames();
 
+  const sortedDatas = data.sort((a, b) => a.id - b.id);
+
   return (
     <Box>
       <Typography variant="h6">項目管理</Typography>
@@ -50,7 +52,7 @@ const Page = () => {
         <ManagementTable<Product>
           title="product"
           metadata={metadata}
-          datas={data}
+          datas={sortedDatas}
           afterAction={fetcher}
           fields={{ games: games }}
           Form={ProductForm}

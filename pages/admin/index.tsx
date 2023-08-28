@@ -32,6 +32,8 @@ const metadata: TableMetadata[] = [
 const Page = () => {
   const { data, fetcher, loading } = useUsers();
 
+  const sortedDatas = data.sort((a, b) => a.id - b.id);
+
   return (
     <Box>
       <Typography variant="h6">管理員</Typography>
@@ -42,7 +44,7 @@ const Page = () => {
         <ManagementTable<User>
           title="admin"
           metadata={metadata}
-          datas={data}
+          datas={sortedDatas}
           afterAction={fetcher}
           Form={UserForm}
         />
