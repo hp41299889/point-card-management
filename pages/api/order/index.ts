@@ -38,15 +38,43 @@ const handler = async (
               },
             },
             include: {
-              user: true,
-              payment: true,
-              product: {
-                include: {
-                  game: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
                 },
               },
-              customer: true,
-              machine: true,
+              payment: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                  gameId: true,
+                  game: {
+                    select: {
+                      id: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
+              customer: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+              machine: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           });
           return res.status(200).json({

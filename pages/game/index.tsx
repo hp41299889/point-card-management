@@ -32,6 +32,8 @@ const metadata: TableMetadata[] = [
 const Page = () => {
   const { data, fetcher, loading } = useGames();
 
+  const sortedDatas = data.sort((a, b) => a.id - b.id);
+
   return (
     <Box>
       <Typography variant="h6">遊戲管理</Typography>
@@ -42,7 +44,7 @@ const Page = () => {
         <ManagementTable<Game>
           title="game"
           metadata={metadata}
-          datas={data}
+          datas={sortedDatas}
           afterAction={fetcher}
           Form={GameForm}
         />

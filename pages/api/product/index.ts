@@ -36,7 +36,12 @@ const handler = async (
           try {
             const products = await prisma.product.findMany({
               include: {
-                game: true,
+                game: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             });
             return res.status(200).json({
