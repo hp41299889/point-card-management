@@ -32,6 +32,8 @@ const metadata: TableMetadata[] = [
 const Page = () => {
   const { data, fetcher, loading } = useMachines();
 
+  const sortedDatas = data.sort((a, b) => a.id - b.id);
+
   return (
     <Box>
       <Typography variant="h6">機台管理</Typography>
@@ -42,7 +44,7 @@ const Page = () => {
         <ManagementTable<Machine>
           title="machine"
           metadata={metadata}
-          datas={data}
+          datas={sortedDatas}
           afterAction={fetcher}
           Form={MachineForm}
         />

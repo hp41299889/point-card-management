@@ -104,9 +104,6 @@ const Page = () => {
       {metadata.map((m, i) => (
         <Fragment key={`e_${m.key}_${i}`}>
           {!extraKey.includes(m.key) && <TableCell />}
-          {/* {m.key !== "cost" &&
-            m.key !== "machine.name" &&
-            m.key !== "price" && <TableCell />} */}
           {m.key === "machine.name" && <TableCell>總計</TableCell>}
           {m.key === "cost" && (
             <TableCell>
@@ -147,6 +144,8 @@ const Page = () => {
     </TableRow>
   );
 
+  const sortedDatas = data.sort((a, b) => a.uid.localeCompare(b.uid));
+
   return (
     <Box>
       <Typography variant="h6">訂單管理</Typography>
@@ -162,7 +161,7 @@ const Page = () => {
         <ManagementTable<Order>
           title="order"
           metadata={metadata}
-          datas={data}
+          datas={sortedDatas}
           afterAction={fetcher}
           fields={{ games, payments, customers, machines }}
           Form={OrderForm}
