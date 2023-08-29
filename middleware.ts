@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verify } from "jsonwebtoken";
 
-import { ApiResponse } from "./utils/server";
 import { verifyAuth } from "./utils/server/auth";
-
-const SECRET = process.env.JWT_SECRET || "jwt_secret";
 
 const authRoutes = [
   "/api/user",

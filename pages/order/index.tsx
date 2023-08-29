@@ -144,7 +144,9 @@ const Page = () => {
     </TableRow>
   );
 
-  const sortedDatas = data.sort((a, b) => a.uid.localeCompare(b.uid));
+  const sortedDatas = data.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
   return (
     <Box>
