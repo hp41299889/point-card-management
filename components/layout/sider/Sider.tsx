@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import RecursiveList, { ListItems } from "./RecursiveList";
 import {
   Category,
+  ChevronLeft,
+  ChevronRight,
   ListAlt,
   Logout,
   ManageAccounts,
@@ -42,7 +44,13 @@ const systemItems = [
   },
 ];
 
-const Sider = () => {
+interface Props {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+const Sider = (props: Props) => {
+  const { collapsed, onToggle } = props;
   const router = useRouter();
   const [user, setUser] = useState<string>("");
   const [role, setRole] = useState<string>("");
@@ -95,17 +103,39 @@ const Sider = () => {
     <Box
       display="flex"
       flexDirection="column"
-      width="300px"
+      width={collapsed ? "100px" : "250px"}
+      height="100vh"
+      position="fixed"
       bgcolor="#101418"
       color="white"
+      sx={{
+        transition: "width 0.3s ease-in-out",
+      }}
     >
       <List component="nav" sx={{ flexGrow: 1 }}>
-        <RecursiveList items={listItems} level={0} />
+        <RecursiveList items={listItems} level={0} collapsed={collapsed} />
       </List>
       <Divider />
+      <Tooltip title={!collapsed ? "折疊" : "展開"} onClick={onToggle}>
+        <IconButton
+          color="primary"
+          sx={{
+            position: "absolute",
+            right: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          {collapsed ? (
+            <ChevronRight color="primary" />
+          ) : (
+            <ChevronLeft color="primary" />
+          )}
+        </IconButton>
+      </Tooltip>
       <Box width="100%">
         <Stack direction="row" justifyContent="space-around">
-          {user}
+          {!collapsed && user}
           <Tooltip
             title="登出"
             onClick={() => {

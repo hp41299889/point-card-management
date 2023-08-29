@@ -138,7 +138,7 @@ const ManagementTable = <T extends DataKey>(props: Props<T>) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[1, 10, 50, 100]}
         rowsPerPage={rowsPerPage}
         component="div"
         count={datas.length}
