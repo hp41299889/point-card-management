@@ -29,10 +29,11 @@ export type ListItems = Array<ListItem | ListGroup>;
 interface Props {
   items: ListItems;
   level: number;
+  collapsed: boolean;
 }
 
 const RecursiveList: FC<Props> = (props) => {
-  const { items, level } = props;
+  const { items, level, collapsed } = props;
   const router = useRouter();
   const [openItems, setOpenItems] = useState<string[]>([]);
 
@@ -52,7 +53,7 @@ const RecursiveList: FC<Props> = (props) => {
             <div key={`group_${item.title}_${index}`}>
               <ListItemButton onClick={() => toggleItemOpen(item.title)}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.title} />
+                {!collapsed && <ListItemText primary={item.title} />}
                 {openItems.includes(item.title) ? (
                   <ExpandLess />
                 ) : (
@@ -61,7 +62,11 @@ const RecursiveList: FC<Props> = (props) => {
               </ListItemButton>
               <Collapse in={openItems.includes(item.title)}>
                 <List>
-                  <RecursiveList items={item.children} level={level + 1} />
+                  <RecursiveList
+                    items={item.children}
+                    level={level + 1}
+                    collapsed={collapsed}
+                  />
                 </List>
               </Collapse>
             </div>
@@ -75,7 +80,7 @@ const RecursiveList: FC<Props> = (props) => {
                   sx={{ pl: level === 0 ? "" : `${level * 30}px` }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.title} />
+                  {!collapsed && <ListItemText primary={item.title} />}
                 </ListItemButton>
               </ListItem>
             </Link>
