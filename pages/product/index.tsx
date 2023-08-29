@@ -40,7 +40,9 @@ const Page = () => {
   const { data, fetcher, loading } = useProducts();
   const { data: games } = useGames();
 
-  const sortedDatas = data.sort((a, b) => a.id - b.id);
+  const sortedDatas = data.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
   return (
     <Box>

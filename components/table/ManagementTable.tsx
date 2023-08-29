@@ -106,7 +106,7 @@ const ManagementTable = <T extends DataKey>(props: Props<T>) => {
                   {metadata.map((m, index) => (
                     <TableCell key={m.key}>
                       {m.key === "sn" ? (
-                        i + 1
+                        page * rowsPerPage + i + 1
                       ) : (
                         <>{m.preDisplay ? m.preDisplay(d) : d[m.key]}</>
                       )}
