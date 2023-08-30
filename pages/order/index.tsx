@@ -72,6 +72,7 @@ const metadata: TableMetadata[] = [
   {
     key: "user.name",
     label: "處理人員",
+    preDisplay: (d) => _.get(d, "user.name"),
   },
   { key: "status", label: "訂單狀態" },
   { key: "note", label: "備註" },
