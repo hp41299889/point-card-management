@@ -11,18 +11,24 @@ import _ from "lodash";
 
 import OrderForm from "@/components/form/management/OrderForm";
 import ManagementTable from "@/components/table/ManagementTable";
-import {
-  useCustomers,
-  useGames,
-  useMachines,
-  useOrders,
-  usePayments,
-  useProducts,
-} from "@/components/table/hook";
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import { Order } from "../api/order/interface";
 import OrderSeachForm from "@/components/form/management/OrderSearchForm";
+import { useFetchData } from "@/utils/client/hook";
+import { Customer } from "../api/customer/interface";
+import {
+  getCustomersUnshowable,
+  getGamesUnshowable,
+  getMachinesUnshowable,
+  getPaymentsUnshowable,
+  getProductsUnshowable,
+} from "@/utils/client/api";
+import { Product } from "../api/product/interface";
+import { Payment } from "../api/payment/interface";
+import { Machine } from "../api/machine/interface";
+import { Game } from "../api/game/interface";
+import { getOrders } from "@/utils/client/api/order";
 
 const costPreProcess = (cost: string) => {
   const splited = cost.split(",");
@@ -93,12 +99,12 @@ const metadata: TableMetadata[] = [
 const extraKey = ["machine.name", "cost", "cardPrice", "price"];
 
 const Page = () => {
-  const { data, fetcher, loading } = useOrders();
-  const { data: products } = useProducts();
-  const { data: payments } = usePayments();
-  const { data: customers } = useCustomers();
-  const { data: machines } = useMachines();
-  const { data: games } = useGames();
+  const { data, fetcher, loading } = useFetchData<Order>(getOrders);
+  const { data: products } = useFetchData<Product>(getProductsUnshowable);
+  const { data: payments } = useFetchData<Payment>(getPaymentsUnshowable);
+  const { data: customers } = useFetchData<Customer>(getCustomersUnshowable);
+  const { data: machines } = useFetchData<Machine>(getMachinesUnshowable);
+  const { data: games } = useFetchData<Game>(getGamesUnshowable);
 
   const extraRow = (data: Order[]) => (
     <TableRow>

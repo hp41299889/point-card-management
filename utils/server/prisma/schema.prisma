@@ -19,6 +19,7 @@ model User {
   password    String
   admin       Boolean
   note        String?
+  showable Boolean @default(true)
   orders      Order[]
 }
 
@@ -28,6 +29,7 @@ model Machine {
   updatedAt   DateTime @updatedAt
   name        String   @unique
   note        String?
+  showable Boolean @default(true)
   orders      Order[]
 }
 
@@ -37,6 +39,7 @@ model Game {
   updatedAt   DateTime  @updatedAt
   name        String    @unique
   note        String?
+  showable Boolean @default(true)
   products    Product[]
 }
 
@@ -46,6 +49,7 @@ model Customer {
   updatedAt   DateTime @updatedAt
   name        String   @unique
   note        String?
+  showable Boolean @default(true)
   orders      Order[]
 }
 
@@ -55,6 +59,7 @@ model Payment {
   updatedAt   DateTime @updatedAt
   name        String   @unique
   note        String?
+  showable Boolean @default(true)
   orders      Order[]
 }
 
@@ -64,6 +69,7 @@ model Product {
   updatedAt   DateTime @updatedAt
   name        String
   note        String?
+  showable Boolean @default(true)
   gameId      Int?
   game        Game?     @relation(fields: [gameId], references: [id])
   orders      Order[]
@@ -78,6 +84,7 @@ model Order {
   price       Int
   status      String
   note        String?
+  showable Boolean @default(true)
   userId      Int?
   user        User?      @relation(fields: [userId], references: [id])
   paymentId   Int?

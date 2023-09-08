@@ -7,6 +7,10 @@ export const getGames = async () => {
   return api.get(route);
 };
 
+export const getGamesUnshowable = async () => {
+  return api.get(`${route}?showable=true`);
+};
+
 export const postGame = async (payload: PostGame) => {
   return api.post(route, payload);
 };

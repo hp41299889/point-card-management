@@ -7,9 +7,11 @@ export interface Customer extends PostCustomer {
 
 export interface PostCustomer extends PatchCustomer {
   name: string;
+  showable: boolean;
 }
 
 export interface PatchCustomer {
   name?: string;
   note?: string;
+  showable?: boolean;
 }

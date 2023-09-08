@@ -2,10 +2,11 @@ import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
-import { useMachines } from "@/components/table/hook";
 import MachineForm from "@/components/form/management/MachineForm";
 import { toLocaleDateTime } from "@/utils/time";
 import { Machine } from "../api/machine/interface";
+import { useFetchData } from "@/utils/client/hook";
+import { getMachines } from "@/utils/client/api";
 
 const metadata: TableMetadata[] = [
   {
@@ -30,7 +31,7 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = useMachines();
+  const { data, fetcher, loading } = useFetchData<Machine>(getMachines);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

@@ -3,9 +3,10 @@ import { Box, Divider, Typography, CircularProgress } from "@mui/material";
 import ManagementTable from "@/components/table/ManagementTable";
 import CustomerForm from "@/components/form/management/CustomerForm";
 import { TableMetadata } from "@/components/table/interface";
-import { useCustomers } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import { Customer } from "../api/customer/interface";
+import { useFetchData } from "@/utils/client/hook";
+import { getCustomers } from "@/utils/client/api";
 
 const metadata: TableMetadata[] = [
   {
@@ -30,7 +31,7 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = useCustomers();
+  const { data, fetcher, loading } = useFetchData<Customer>(getCustomers);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

@@ -7,6 +7,10 @@ export const getMachines = async () => {
   return api.get(route);
 };
 
+export const getMachinesUnshowable = async () => {
+  return api.get(`${route}?showable=true`);
+};
+
 export const postMachine = async (payload: PostMachine) => {
   return api.post(route, payload);
 };

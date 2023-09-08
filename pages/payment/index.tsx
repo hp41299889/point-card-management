@@ -2,10 +2,11 @@ import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
-import { usePayments } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import PaymentForm from "@/components/form/management/PaymentForm";
 import { Payment } from "../api/payment/interface";
+import { useFetchData } from "@/utils/client/hook";
+import { getPayments } from "@/utils/client/api";
 
 const metadata: TableMetadata[] = [
   {
@@ -30,7 +31,7 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = usePayments();
+  const { data, fetcher, loading } = useFetchData<Payment>(getPayments);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

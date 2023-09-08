@@ -10,11 +10,21 @@ const handler = async (
   res: NextApiResponse<ApiResponse>
 ) => {
   try {
-    const { method } = req;
+    const {
+      method,
+      query: { showable },
+    } = req;
     switch (method) {
       case "GET": {
         try {
-          const users = await prisma.user.findMany();
+          const users =
+            showable && showable === "ture"
+              ? await prisma.user.findMany({
+                  where: {
+                    showable: true,
+                  },
+                })
+              : await prisma.user.findMany();
           return res.status(200).json({
             status: "success",
             message: "read users success",

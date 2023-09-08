@@ -11,6 +11,7 @@ export interface PostUser extends PatchUser {
   password: string;
   admin: boolean;
   note?: string;
+  showable: boolean;
 }
 
 export interface PatchUser {
@@ -19,4 +20,5 @@ export interface PatchUser {
   password?: string;
   admin?: boolean;
   note?: string;
+  showable?: boolean;
 }

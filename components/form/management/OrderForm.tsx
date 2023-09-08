@@ -203,6 +203,7 @@ const OrderForm = (props: Props) => {
   const onSubmitProduct = async () => {
     const payload: PostProduct = {
       name: productName,
+      showable: true,
       gameId: gameId,
     };
     try {

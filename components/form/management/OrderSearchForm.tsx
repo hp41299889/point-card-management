@@ -7,8 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { Payment } from "@/pages/api/payment/interface";
 import { Customer } from "@/pages/api/customer/interface";
 import { Machine } from "@/pages/api/machine/interface";
-import { getOrders } from "@/utils/client/api/order";
-import { useOrders } from "@/components/table/hook";
 import { Game } from "@/pages/api/game/interface";
 import { Product } from "@/pages/api/product/interface";
 import { getProductsByGameId } from "@/utils/client/api/product";
