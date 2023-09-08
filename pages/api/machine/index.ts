@@ -9,11 +9,17 @@ const handler = async (
   res: NextApiResponse<ApiResponse>
 ) => {
   try {
-    const { method } = req;
+    const {
+      method,
+      query: { showable },
+    } = req;
     switch (method) {
       case "GET": {
         try {
-          const machines = await prisma.machine.findMany();
+          const machines =
+            showable && showable === "true"
+              ? await prisma.machine.findMany({ where: { showable: true } })
+              : await prisma.machine.findMany();
           return res.status(200).json({
             status: "success",
             message: "read machines success",

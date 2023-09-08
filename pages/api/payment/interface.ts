@@ -7,9 +7,11 @@ export interface Payment extends PostPayment {
 
 export interface PostPayment extends PatchPayment {
   name: string;
+  showable: boolean;
 }
 
 export interface PatchPayment {
   name?: string;
   note?: string;
+  showable?: boolean;
 }

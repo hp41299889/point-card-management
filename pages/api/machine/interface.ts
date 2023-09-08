@@ -7,9 +7,11 @@ export interface Machine extends PostMachine {
 
 export interface PostMachine extends PatchMachine {
   name: string;
+  showable: boolean;
 }
 
 export interface PatchMachine {
   name?: string;
   note?: string;
+  showable?: boolean;
 }

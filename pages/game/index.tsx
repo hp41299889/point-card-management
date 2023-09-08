@@ -6,6 +6,8 @@ import { useGames } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import GameForm from "@/components/form/management/GameForm";
 import { Game } from "../api/game/interface";
+import { useFetchData } from "@/utils/client/hook";
+import { getGames } from "@/utils/client/api";
 
 const metadata: TableMetadata[] = [
   {
@@ -30,7 +32,7 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = useGames();
+  const { data, fetcher, loading } = useFetchData<Game>(getGames);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

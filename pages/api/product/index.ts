@@ -14,11 +14,17 @@ const handler = async (
       case "GET": {
         const { query } = req;
         const gameId = Number(query.gameId);
+        const showable = String(query.showable);
         if (!isNaN(gameId)) {
           try {
-            const products = await prisma.product.findMany({
-              where: { gameId },
-            });
+            const products =
+              showable && showable === "true"
+                ? await prisma.product.findMany({
+                    where: { gameId, showable: true },
+                  })
+                : await prisma.product.findMany({
+                    where: { gameId },
+                  });
             return res.status(200).json({
               status: "success",
               message: "read products by gameId success",
@@ -34,16 +40,31 @@ const handler = async (
           }
         } else {
           try {
-            const products = await prisma.product.findMany({
-              include: {
-                game: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
-              },
-            });
+            const products =
+              showable && showable === "true"
+                ? await prisma.product.findMany({
+                    where: {
+                      showable: true,
+                    },
+                    include: {
+                      game: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+                  })
+                : await prisma.product.findMany({
+                    include: {
+                      game: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+                  });
             return res.status(200).json({
               status: "success",
               message: "read products success",

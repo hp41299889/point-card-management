@@ -11,6 +11,11 @@ import {
   Grid,
   TextField,
   Autocomplete,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 
 import { FormProps } from "./interface";
@@ -40,6 +45,7 @@ interface Props extends FormProps<Product> {
 const initData: FormData = {
   name: "",
   note: "",
+  showable: true,
   gameId: 0,
   confirm: false,
 };
@@ -220,6 +226,35 @@ const ProductForm = (props: Props) => {
                   fullWidth
                   {...register("note")}
                   disabled={type === "watch"}
+                />
+              </Grid>
+              <Grid item lg={4}>
+                <Controller
+                  name="showable"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControl disabled={type === "watch"}>
+                      <FormLabel>顯示於選項</FormLabel>
+                      <RadioGroup
+                        row
+                        value={value}
+                        onChange={(e) =>
+                          onChange(e.target.value === "true" ? true : false)
+                        }
+                      >
+                        <FormControlLabel
+                          value={true}
+                          control={<Radio />}
+                          label="是"
+                        />
+                        <FormControlLabel
+                          value={false}
+                          control={<Radio />}
+                          label="否"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  )}
                 />
               </Grid>
             </Grid>

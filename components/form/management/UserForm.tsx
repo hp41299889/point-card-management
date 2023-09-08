@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
   AlertTitle,
@@ -8,7 +8,15 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Grid,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
   TextField,
 } from "@mui/material";
 
@@ -33,6 +41,7 @@ const initData: FormData = {
   password: "",
   admin: false,
   note: "",
+  showable: true,
   confirm: false,
 };
 
@@ -54,18 +63,20 @@ const UserForm = (props: Props) => {
       case "create": {
         try {
           setValue("confirm", true);
-          const res = await postUser(payload);
-          if (res.data.status === "success") {
-            onClose();
-            dispatch(
-              setAppFeedbackSnackbar({
-                open: true,
-                type: "success",
-                message: "新增用戶成功！",
-              })
-            );
-            afterAction();
-          }
+          console.log(payload);
+
+          // const res = await postUser(payload);
+          // if (res.data.status === "success") {
+          //   onClose();
+          //   dispatch(
+          //     setAppFeedbackSnackbar({
+          //       open: true,
+          //       type: "success",
+          //       message: "新增用戶成功！",
+          //     })
+          //   );
+          //   afterAction();
+          // }
         } catch (err) {
           console.error(err);
           dispatch(
@@ -198,6 +209,35 @@ const UserForm = (props: Props) => {
                   fullWidth
                   {...register("note")}
                   disabled={type === "watch"}
+                />
+              </Grid>
+              <Grid item lg={4}>
+                <Controller
+                  name="showable"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControl disabled={type === "watch"}>
+                      <FormLabel>顯示於選項</FormLabel>
+                      <RadioGroup
+                        row
+                        value={value}
+                        onChange={(e) =>
+                          onChange(e.target.value === "true" ? true : false)
+                        }
+                      >
+                        <FormControlLabel
+                          value={true}
+                          control={<Radio />}
+                          label="是"
+                        />
+                        <FormControlLabel
+                          value={false}
+                          control={<Radio />}
+                          label="否"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  )}
                 />
               </Grid>
             </Grid>
