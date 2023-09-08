@@ -9,11 +9,17 @@ const handler = async (
   res: NextApiResponse<ApiResponse>
 ) => {
   try {
-    const { method } = req;
+    const {
+      method,
+      query: { showable },
+    } = req;
     switch (method) {
       case "GET": {
         try {
-          const payments = await prisma.payment.findMany();
+          const payments =
+            showable && showable === "ture"
+              ? await prisma.payment.findMany({ where: { showable: true } })
+              : await prisma.payment.findMany();
           return res.status(200).json({
             status: "success",
             message: "read payments success",

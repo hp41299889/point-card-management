@@ -7,6 +7,9 @@ import { toLocaleDateTime } from "@/utils/time";
 import ProductForm from "@/components/form/management/ProductForm";
 import { Product } from "../api/product/interface";
 import _ from "lodash";
+import { useFetchData } from "@/utils/client/hook";
+import { getGamesUnshowable, getProducts } from "@/utils/client/api";
+import { Game } from "../api/game/interface";
 
 const metadata: TableMetadata[] = [
   {
@@ -37,8 +40,8 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = useProducts();
-  const { data: games } = useGames();
+  const { data, fetcher, loading } = useFetchData<Product>(getProducts);
+  const { data: games } = useFetchData<Game>(getGamesUnshowable);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

@@ -7,6 +7,10 @@ export const getPayments = async () => {
   return api.get(route);
 };
 
+export const getPaymentsUnshowable = async () => {
+  return api.get(`${route}?showable=true`);
+};
+
 export const postPayment = async (payload: PostPayment) => {
   return api.post(route, payload);
 };

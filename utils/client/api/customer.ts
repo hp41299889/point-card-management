@@ -7,6 +7,10 @@ export const getCustomers = async () => {
   return api.get(route);
 };
 
+export const getCustomersUnshowable = async () => {
+  return api.get(`${route}?showable=true`);
+};
+
 export const postCustomer = async (payload: PostCustomer) => {
   return api.post(route, payload);
 };

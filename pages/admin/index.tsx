@@ -4,8 +4,9 @@ import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import ManagementTable from "@/components/table/ManagementTable";
 import UserForm from "@/components/form/management/UserForm";
-import { useUsers } from "@/components/table/hook";
 import { User } from "../api/user/interface";
+import { useFetchData } from "@/utils/client/hook";
+import { getUsers } from "@/utils/client/api";
 
 const metadata: TableMetadata[] = [
   {
@@ -30,7 +31,7 @@ const metadata: TableMetadata[] = [
 ];
 
 const Page = () => {
-  const { data, fetcher, loading } = useUsers();
+  const { data, fetcher, loading } = useFetchData<User>(getUsers);
 
   const sortedDatas = data.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

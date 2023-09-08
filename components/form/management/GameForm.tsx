@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
   AlertTitle,
@@ -8,7 +8,12 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Grid,
+  Radio,
+  RadioGroup,
   TextField,
 } from "@mui/material";
 
@@ -35,6 +40,7 @@ interface Props extends FormProps<Game> {
 const initData: FormData = {
   name: "",
   note: "",
+  showable: true,
   confirm: false,
 };
 
@@ -177,6 +183,35 @@ const GameForm = (props: Props) => {
                   fullWidth
                   {...register("note")}
                   disabled={type === "watch"}
+                />
+              </Grid>
+              <Grid item lg={4}>
+                <Controller
+                  name="showable"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <FormControl disabled={type === "watch"}>
+                      <FormLabel>顯示於選項</FormLabel>
+                      <RadioGroup
+                        row
+                        value={value}
+                        onChange={(e) =>
+                          onChange(e.target.value === "true" ? true : false)
+                        }
+                      >
+                        <FormControlLabel
+                          value={true}
+                          control={<Radio />}
+                          label="是"
+                        />
+                        <FormControlLabel
+                          value={false}
+                          control={<Radio />}
+                          label="否"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  )}
                 />
               </Grid>
             </Grid>

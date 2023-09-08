@@ -10,12 +10,14 @@ export interface Product extends PostProduct {
 
 export interface PostProduct extends PatchProduct {
   name: string;
+  showable: boolean;
   gameId: number;
 }
 
 export interface PatchProduct {
   name?: string;
   note?: string;
+  showable?: boolean;
   gameId?: number;
   game?: Game;
 }
