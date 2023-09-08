@@ -2,7 +2,6 @@ import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
-import { useGames, useProducts } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import ProductForm from "@/components/form/management/ProductForm";
 import { Product } from "../api/product/interface";

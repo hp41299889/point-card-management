@@ -2,7 +2,6 @@ import { Box, Typography, Divider, CircularProgress } from "@mui/material";
 
 import ManagementTable from "@/components/table/ManagementTable";
 import { TableMetadata } from "@/components/table/interface";
-import { usePayments } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import PaymentForm from "@/components/form/management/PaymentForm";
 import { Payment } from "../api/payment/interface";

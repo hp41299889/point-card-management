@@ -11,14 +11,6 @@ import _ from "lodash";
 
 import OrderForm from "@/components/form/management/OrderForm";
 import ManagementTable from "@/components/table/ManagementTable";
-import {
-  useCustomers,
-  useGames,
-  useMachines,
-  useOrders,
-  usePayments,
-  useProducts,
-} from "@/components/table/hook";
 import { TableMetadata } from "@/components/table/interface";
 import { toLocaleDateTime } from "@/utils/time";
 import { Order } from "../api/order/interface";
@@ -29,9 +21,7 @@ import {
   getCustomersUnshowable,
   getGamesUnshowable,
   getMachinesUnshowable,
-  getPayments,
   getPaymentsUnshowable,
-  getProducts,
   getProductsUnshowable,
 } from "@/utils/client/api";
 import { Product } from "../api/product/interface";
