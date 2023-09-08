@@ -3,7 +3,6 @@ import { Box, Divider, Typography, CircularProgress } from "@mui/material";
 import ManagementTable from "@/components/table/ManagementTable";
 import CustomerForm from "@/components/form/management/CustomerForm";
 import { TableMetadata } from "@/components/table/interface";
-import { useCustomers } from "@/components/table/hook";
 import { toLocaleDateTime } from "@/utils/time";
 import { Customer } from "../api/customer/interface";
 import { useFetchData } from "@/utils/client/hook";
