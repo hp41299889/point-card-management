@@ -1,3 +1,4 @@
+import Head from "next/head";
 import type { AppProps } from "next/app";
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
@@ -33,6 +34,9 @@ export const App = (props: AppProps) => {
   const { Component, pageProps, router } = props;
   return (
     <CssVarsProvider theme={theme}>
+      <Head>
+        <title>訂單管理</title>
+      </Head>
       <Providers>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}

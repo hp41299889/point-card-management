@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { useState, useEffect, useCallback } from "react";
 
-type FetcherData = () => Promise<AxiosResponse<any, any>>;
+type FetcherData = (q?: object) => Promise<AxiosResponse<any, any>>;
 
 interface FetchDataHook<T> {
   data: T[];
@@ -17,19 +17,22 @@ export const useFetchData = <T,>(
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetcher = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetcherData();
-      if (res.data.status === "success") {
-        setData(res.data.data);
+  const fetcher = useCallback(
+    async (q?: object) => {
+      setLoading(true);
+      try {
+        const res = await fetcherData(q);
+        if (res.data.status === "success") {
+          setData(res.data.data);
+        }
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, [fetcherData]);
+    },
+    [fetcherData]
+  );
 
   useEffect(() => {
     fetcher();
