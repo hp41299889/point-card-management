@@ -87,6 +87,7 @@ const OrderSeachForm = (props: Props) => {
       startAt: startAt ? startAt.toISOString() : undefined,
       endAt: endAt ? endAt.toISOString() : undefined,
     };
+    console.log(query);
     fetcher(query);
   };
 
