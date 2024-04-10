@@ -32,6 +32,8 @@ const theme = extendTheme({
 
 export const App = (props: AppProps) => {
   const { Component, pageProps, router } = props;
+  console.log('heyhey');
+  
   return (
     <CssVarsProvider theme={theme}>
       <Head>
